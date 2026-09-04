@@ -1,0 +1,32 @@
+<h2 mat-dialog-title>{{ room().name }}</h2>
+<mat-dialog-content>
+  <div>
+    <h2>STAGE A - エターナルズとの遭遇</h2>
+    <p>
+      「エターナル・ワールド」は広大な自然が広がっていた。<br>
+      フィールドを探索して、スター系エターナルズを復活させよう。
+    </p>
+  </div>
+  <div class="player-container">
+    @for(player of room().players; track $index) {
+      <div class="slot player-slot">
+        <span class="name">{{ player.name }}</span>
+      </div>
+    }
+    @for (emptySlot of emptyPlayerSlot(); track $index) {
+      <div class="slot empty-slot">
+        <span class="waiting">等待玩家加入<span>.</span><span>.</span><span>.</span></span>
+      </div>
+    }
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button matButton (click)="leaveRoom()">離開</button>
+  @if (isHost) {
+    <button matButton="filled"
+      (click)="startGame()"
+      [disabled]="room().players.length < room().maxPlayer"
+    >開始
+    </button>
+  }
+</mat-dialog-actions>

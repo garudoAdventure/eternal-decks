@@ -1,13 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { NxWelcome } from './nx-welcome';
+import { SocketService } from './core/socket.service';
 
 @Component({
-  imports: [NxWelcome, RouterModule],
+  imports: [RouterModule],
   selector: 'app-root',
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
-export class App {
-  protected title = 'frontend';
+export class App implements OnInit {
+  private socket = inject(SocketService);
+
+  ngOnInit() {
+    this.socket.connect();
+    let name = 'Developer-' + Math.round(Math.random() * 100);
+    localStorage.setItem('playerName', name);
+  }
 }

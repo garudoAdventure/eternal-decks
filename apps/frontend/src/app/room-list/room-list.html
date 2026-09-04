@@ -1,0 +1,24 @@
+<div class="main">
+  <div class="create-room">
+    <button matButton="filled" (click)="createRoom()">建立房間</button>
+  </div>
+  <div class="room-list">
+  @if (rooms().length == 0) {
+    <div class="no-room">目前沒有房間，趕緊創建一個吧！</div>
+  }
+  @for (room of rooms(); track $index) {
+    <mat-card class="room">
+      <mat-card-header>
+        <mat-card-title>Room {{ $index }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p>關卡: {{ room.stage }}</p>
+        <p>人數: {{ room.players.length }} / {{ room.maxPlayer }}</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button matButton="filled" (click)="joinRoom(room)">加入</button>
+      </mat-card-actions>
+    </mat-card>
+  }
+  </div>
+</div>
