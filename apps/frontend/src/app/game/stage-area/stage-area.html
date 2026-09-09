@@ -1,0 +1,10 @@
+<div class="star-card-container">
+  @for(card of starCard(); track $index) {
+    <app-card [card]="card"></app-card>
+  }
+</div>
+<div class="collect-star-container">
+  @for (star of getStar(); track $index) {
+    <div class="star-token"></div>
+  }
+</div>

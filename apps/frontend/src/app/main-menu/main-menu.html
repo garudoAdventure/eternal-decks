@@ -1,4 +1,15 @@
 <div class="main-menu">
-  <h1>桌遊大廳</h1>
-  <button (click)="enterLobby()">開始遊戲</button>
+  <div class="container">
+    <h1>永恆牌</h1>
+    <button mat-raised-button color="primary" class="start-btn" [class.hide]="showNameInput" (click)="enterLobby()">開始遊戲</button>
+    <div class="name-panel" [class.visible]="showNameInput">
+      <form [formGroup]="nameForm">
+        <mat-form-field appearance="outline">
+          <mat-label>玩家名稱</mat-label>
+          <input matInput maxlength="20" formControlName="name">
+        </mat-form-field>
+        <button mat-flat-button color="accent" (click)="confirm()">確定</button>
+      </form>
+    </div>
+  </div>
 </div>

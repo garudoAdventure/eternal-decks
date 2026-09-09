@@ -1,0 +1,49 @@
+<div id="player-container">
+  @for(player of players(); track $index; let playerIdx = $index) {
+    <mat-card class="player" #player>
+      <mat-card-header>
+        <div class="player-token">
+          <div class="token-img"
+            [ngClass]="getColorStr(player.color)"
+            (click)="onSelectPlayer(player.id)"
+          ></div>
+        </div>
+        <div class="player-name">{{ player.name }}</div>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="deck-info">
+          <img class="deck-icon" src="/asset/deck_icon.png">
+          <span class="deck-num">{{ player.deckNum }}</span>
+        </div>
+        @if (playerIdx != 0) {
+          <div class="hand-card" >
+            @for (card of player.hand; track $index) {
+              <div class="card-container">
+                <app-card [card]="card"></app-card>
+              </div>
+            }
+          </div>
+        } @else {
+          <div class="hand-card">
+            @for (card of player.hand; track $index) {
+              <div class="card-container"
+                [class.selected]="selectedCard()[$index]"
+              >
+                <app-card [card]="card" [size]="CardSize.L"
+                  (click)="onSelectCard($index)"
+                ></app-card>
+                @if (card.type == CardType.ABILITY) {
+                  <div class="use-btn" (click)="useCard($index)">使用</div> 
+                } @else {
+                  <div class="rotate-btn" (click)="rotateCard($index)">
+                    <mat-icon>cached</mat-icon>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        }
+      </mat-card-content>
+    </mat-card>
+  }
+</div>

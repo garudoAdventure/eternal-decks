@@ -1,0 +1,21 @@
+<div class="river-container">
+  <div class="river-card">
+    @for(card of river().cards; track $index) {
+      <app-card [card]="card"
+        [class.clickable]="validRiverCard()"
+        (click)="onSelectCard($index)"
+      ></app-card>
+    }
+    @if (validField()[3]) {
+      <div class="hint-card"
+        (click)="onSelectField(3)">
+      </div>
+    }
+  </div>
+  <div class="river-rare-card">
+    @for(card of river().rareCards; track $index) {
+      <app-card [card]="card"></app-card>
+    }
+  </div>
+  <div class="card gameOver"></div>
+</div>

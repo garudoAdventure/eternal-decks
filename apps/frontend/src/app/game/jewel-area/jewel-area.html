@@ -1,0 +1,9 @@
+<div class="jewel-container">
+  @for (genJewel of jewels(); track $index){
+    <div class="jewel-token"
+      [class.hidden]="genJewel"
+      [class.clickable]="validJewel()[$index]"
+      (click)="onSelectJewel($index)"
+    ></div>
+  }
+</div>

@@ -1,7 +1,8 @@
 import { Component, computed, inject, OnInit, signal } from "@angular/core";
-import { MatDialog, MatDialogRef, MatDialogActions, MatDialogClose, MatDialogTitle, MatDialogContent, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { Router } from "@angular/router";
+import { MatDialog, MatDialogRef, MatDialogActions, MatDialogTitle, MatDialogContent, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { MatButtonModule } from "@angular/material/button";
-import { Room } from "@shared/types";
+import { Room, RoomStatus } from "@shared/types";
 import { RoomList } from "../room-list";
 import { SocketService } from "../../core/socket.service";
 import { LeaveRoomConfirmDialog } from "../leave-room-confirm-dialog/leave-room-confirm-dialog";
@@ -9,12 +10,13 @@ import { LeaveRoomConfirmDialog } from "../leave-room-confirm-dialog/leave-room-
 @Component({
   selector: 'room-waiting-dialog',
   templateUrl: './room-waiting-dialog.html',
-  imports: [MatButtonModule, MatDialogActions, MatDialogClose, MatDialogTitle, MatDialogContent],
+  imports: [MatButtonModule, MatDialogActions, MatDialogTitle, MatDialogContent],
   styleUrl: './room-waiting-dialog.scss'
 })
 export class RoomWaitingDialog implements OnInit {
   readonly dialogRef = inject(MatDialogRef<RoomList>);
   private dialog = inject(MatDialog);
+  private router = inject(Router);
   private roomData = inject(MAT_DIALOG_DATA);
   private socketService = inject(SocketService);
 
@@ -28,6 +30,11 @@ export class RoomWaitingDialog implements OnInit {
   ngOnInit(): void {
     this.socketService.on<Room>('roomUpdated').subscribe((room) => {
       this.room.set(room);
+      if (room.status == RoomStatus.GAME_START) {
+        sessionStorage.setItem('roomId', room.id);
+        this.dialogRef.close();
+        this.router.navigate(['/game']);
+      }
     });
   }
 
@@ -49,6 +56,6 @@ export class RoomWaitingDialog implements OnInit {
   }
 
   startGame() {
-
+    this.socketService.emit('startGame', { roomId: this.room().id });
   }
 }

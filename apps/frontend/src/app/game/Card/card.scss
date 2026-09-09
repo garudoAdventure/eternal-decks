@@ -1,0 +1,10 @@
+.card {
+  position: relative;
+  background-size: contain;
+  background-repeat: no-repeat;
+  transition: rotate 0.2s;
+  
+  &.isRotate { 
+    rotate: 180deg; 
+  }
+}

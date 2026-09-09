@@ -1,0 +1,34 @@
+<div id="page">
+  <div id="header">
+    <span>{{ message() }}</span>
+    @if (button().show) {
+      <button matButton="outlined" (click)="onClickConfirmButton()">
+        {{ button().string }}
+      </button>
+    }
+  </div>
+  <div id="content">
+    <div id="game-board">
+      <app-revive-area></app-revive-area>
+      <app-jewel-area></app-jewel-area>
+      <app-stage-area></app-stage-area>
+      <app-field></app-field>
+      <app-heart-area></app-heart-area>
+      <app-river></app-river>
+      <app-discard></app-discard>
+      <div class="star-container">
+        @for(star of stars(); track $index) {
+          <div class="star-token"></div>
+        }
+      </div>
+    </div>
+    <app-player-area></app-player-area>
+    <!-- <div class="card-preview"
+      [class.show]="gameService.cardPreview.isShow"
+      [style.top.px]="gameService.cardPreview.top"
+      [style.left.px]="gameService.cardPreview.left"
+    >
+      <img [src]="gameService.cardPreview.cardImg">
+    </div> -->
+  </div>
+</div>

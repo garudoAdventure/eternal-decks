@@ -1,0 +1,44 @@
+import { Component, inject, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { GameEvent } from '@shared/types';
+import { SocketService } from '../core/socket.service';
+import { Field } from './field/field';
+import { River } from './River/river';
+import { Discard } from './Discard/discard';
+import { PlayerArea } from './player-area/player-area';
+import { ReviveArea } from './revive-area/revive-area';
+import { JewelArea } from './jewel-area/jewel-area';
+import { StageArea } from './stage-area/stage-area';
+import { HeartArea } from './heart-area/heart-area';
+import { GameBoardStateService } from './gameBoardState.service';
+import { GameActionStateService } from './gameActionState.service';
+
+@Component({
+  selector: 'app-game',
+  imports: [
+    CommonModule, MatButtonModule,
+    ReviveArea, Field, River, Discard, PlayerArea, JewelArea, StageArea, HeartArea
+  ],
+  templateUrl: './game.html',
+  styleUrl: './game.scss',
+})
+export class Game implements OnInit {
+  private socketService = inject(SocketService);
+  private gameBoardState = inject(GameBoardStateService);
+  private gameActionState = inject(GameActionStateService);
+
+  stars = this.gameBoardState.stars;
+  message = this.gameActionState.message;
+  button = this.gameActionState.button;
+
+  ngOnInit() {
+    this.socketService.emit('loadGame', { roomId: sessionStorage.getItem('roomId') });
+  }
+
+  onClickConfirmButton() {
+    this.socketService.emit(GameEvent.CONFIRM_ACTION, {
+      roomId: sessionStorage.getItem('roomId'),
+    });
+  }
+}

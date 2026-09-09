@@ -1,0 +1,64 @@
+:host {
+  display: block;
+  height: 100vh;
+}
+
+.container {
+  width: 420px;
+  padding: 3rem;
+  margin-top: 20px;
+  text-align: center;
+  border-radius: 20px;
+  background: rgba(255,255,255,.25);
+  backdrop-filter: blur(12px);
+  border: 2px solid rgba(0,0,0,.08);
+  box-shadow: 0 12px 40px rgba(0,0,0,.15);
+
+  h1 {
+    color: black;
+    margin-bottom: 2rem;
+    font-size: 3rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+  }
+}
+
+.start-btn {
+  width: 220px;
+  height: 56px;
+
+  font-size: 1.2rem;
+  font-weight: 700;
+
+  transition:
+    opacity .35s ease,
+    transform .35s ease;
+  opacity: 1;
+  transform: translateY(0);
+
+  &.hide {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-12px);
+  }
+}
+
+.name-panel {
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity .35s ease,
+    transform .35s ease,
+    max-height .35s ease;
+
+  &.visible {
+    max-height: 200px;
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+mat-form-field {
+  width: 100%;
+}

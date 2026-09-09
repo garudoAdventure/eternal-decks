@@ -9,11 +9,11 @@ import { SocketService } from './core/socket.service';
   styleUrl: './app.scss',
 })
 export class App implements OnInit {
-  private socket = inject(SocketService);
-
-  ngOnInit() {
-    this.socket.connect();
-    let name = 'Developer-' + Math.round(Math.random() * 100);
-    localStorage.setItem('playerName', name);
+  private socketService = inject(SocketService);
+  
+  ngOnInit(): void {
+    if (sessionStorage.getItem('token')) {
+      this.socketService.connect();
+    }
   }
 }

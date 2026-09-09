@@ -44,7 +44,6 @@ export class RoomList implements OnInit {
             });
             this.socketService.emit('createRoom', {
               roomId: room.id,
-              playerName: localStorage.getItem('playerName')
             });
           }, error: () => {
             console.log('no!!!!!');
@@ -62,7 +61,7 @@ export class RoomList implements OnInit {
     this.dialog.open(RoomWaitingDialog, {
       width: '600px',
       disableClose: true,
-      data: { roomId: room.id }
+      data: room
     });
   }
 }

@@ -1,0 +1,41 @@
+@use '../anim.scss';
+
+.jewel-token {
+  width: 40px;
+  height: 30px;
+  background-image: url("/asset/jewel.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.jewel-container {
+  width: 175px;
+  height: 130px;
+  padding: 30px 0 0 63px;
+  background-image: url("/asset/threeJewel.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  .jewel-token {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 1px;
+
+    &:nth-child(2n + 1) {
+      margin-right: 60px;
+    }
+
+    &.hidden {
+      visibility: hidden;
+    }
+
+    &.clickable {
+      animation: bloom2 1s linear infinite alternate;
+      cursor: pointer;
+
+      &:hover {
+        top: -5px;
+      }
+    }
+  }
+}

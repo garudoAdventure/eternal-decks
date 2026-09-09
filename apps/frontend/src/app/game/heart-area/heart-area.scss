@@ -1,0 +1,20 @@
+.heart-container {
+  .heart-token {
+    position: relative;
+    left: 0px;
+    width: 36px;
+    height: 32px;
+    margin-bottom: 9px;
+    background-image: url("/asset/heart.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    transition: left 0.5s;
+    
+    &.isUsed { left: 50px; }
+    
+    &:hover.clickable {
+      top: -5px;
+      cursor: pointer;
+    }
+  }
+}

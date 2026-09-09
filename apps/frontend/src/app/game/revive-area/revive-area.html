@@ -1,0 +1,13 @@
+<div class="eternal-container">
+  @for(eternal of eternals(); track $index) {
+    <div class="card-container">
+      <app-card [card]="eternal.card"
+        [class.clickable]="validEternal()[$index]"
+        (click)="onSelectEternal($index)"
+      ></app-card>
+      @if (!eternal.isCurse) {
+        <div class="jewel-token"></div>
+      }
+    </div>
+  }
+</div>

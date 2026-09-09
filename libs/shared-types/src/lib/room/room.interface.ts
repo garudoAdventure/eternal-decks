@@ -1,6 +1,7 @@
-export interface Player {
-  socketId: string;
+export interface RoomPlayer {
+  playerId: string;
   name: string;
+  socketId: string;
 }
 
 export enum RoomStatus {
@@ -14,5 +15,5 @@ export interface Room {
   status: RoomStatus;
   stage: number;
   maxPlayer: number;
-  players: Player[];
+  players: RoomPlayer[];
 }

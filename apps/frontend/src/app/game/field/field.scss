@@ -1,0 +1,56 @@
+@use '../global.scss';
+@use '../anim.scss';
+
+.field-container {
+  .field {
+    display: flex;
+    justify-content: space-between;
+    width: 885px;
+    height: 130px;
+    margin: 7px;
+    padding: 6px;
+
+    .field-card-container {
+      display: flex;
+      justify-content: space-between;
+      width: 660px;
+
+      .field-card {
+        width: 660px;
+
+        app-card {
+          display: inline-block;
+        }
+      }
+
+      .field-eternal {
+        display: inline-flex;
+        justify-content: end;
+
+        .clickable {
+          position: relative;
+          
+          &:not(:hover) {
+            animation: float 1s ease-in-out infinite alternate;
+          }
+
+          &:hover {
+            top: -5px;
+            box-shadow:
+              0px 0px 10px #724b80,
+              0px 0px 10px #724b80,
+              0px 0px 10px #724b80;
+          }
+        }
+      }
+    }
+
+    .field-bonus {
+      width: 96px;
+    }
+
+    app-card {
+      margin-right: 3px;
+    }
+  }
+}

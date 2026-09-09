@@ -1,0 +1,102 @@
+#player-container {
+  display: flex;
+  flex-direction: column;
+  align-self: flex-start;
+  position: sticky;
+  top: 65px;
+  margin-left: 10px;
+}
+
+.player {
+  margin-bottom: 10px;
+  background-color: lavender;
+  width: 500px;
+
+  mat-card-header {
+    align-items: center;
+    padding-bottom: 16px;
+  }
+
+  .player-token {
+    display: flex;
+
+    .token-img {
+      width: 40px;
+      height: 40px;
+      background-image: url("/asset/playerToken.png");
+      background-repeat: no-repeat;
+      background-size: 80px 80px;
+      background-position: 0 0;
+
+      &.red { background-position: 0 0; }
+      &.blue { background-position: -40px 0; }
+      &.green { background-position: 0 -40px; }
+      &.yellow { background-position: -40px -40px; }
+    }
+  }
+
+  .player-name {
+    font-size: 32px;
+    font-weight: 500;
+    margin-left: 16px;
+  }
+
+  .deck-info {
+    display: flex;
+    align-items: center;
+    padding-bottom: 16px;
+
+    .deck-icon {
+      max-width: 40px;
+      margin-right: 16px;
+    }
+
+    .deck-num {
+      font-size: 26px;
+    }
+  }
+
+  .hand-card {
+    .card-container {
+      position: relative;
+      display: inline-block;
+      margin-right: 5px;
+
+      .use-btn {
+        display: none;
+        width: 100%;
+        font-size: 15px;
+        text-align: center;
+        background-color: white;
+        border-radius: 0.5em;
+      }
+
+      .rotate-btn {
+        display: none;
+        position: absolute;
+        top: calc(50% - 12px);
+        left: calc(50% - 12px);
+        width: 25px;
+        height: 25px;
+        border-radius: 1em;
+        background-color: antiquewhite;
+      }
+
+      &.selected { top: -10px; }
+
+      &:hover {
+        top: -10px;
+        cursor: pointer;
+
+        .rotate-btn, .use-btn {
+          display: block;
+
+          &:hover {
+            background-color: lightgray;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
+}
