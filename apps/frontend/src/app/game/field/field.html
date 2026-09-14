@@ -1,24 +1,20 @@
 <div class="field-container">
   @for(field of fields(); track $index; let fieldIdx = $index) {
     <div class="field">
-      <div class="field-rule">
-        <app-card [card]="field.rule"></app-card>
-      </div>
+      <div class="field-rule"><app-card [card]="field.rule"></app-card></div>
       <div class="field-card-container">
-        <div class="field-card">
+        <div class="field-card"
+          [appBoardRef]="getFieldKey(fieldIdx)"
+          [class.valid-target]="isValidTarget(fieldIdx)"
+          [class.hovered-target]="isHovered(fieldIdx)"
+        >
           @for(card of field.cards; track $index) {
             <app-card [card]="card" (click)="onSelectFieldCard(fieldIdx, $index)"></app-card>
-          }
-          @if (validField()[fieldIdx]) {
-            <div class="hint-card" (click)="onSelectField(fieldIdx)"></div>
           }
         </div>
         <div class="field-eternal">
           @for(eternal of field.eternals; track $index) {
-            <app-card [card]="eternal.card"
-              [class.clickable]="validFieldEternal()[fieldIdx]"
-              (click)="onSelectFieldEternal($index)">
-            </app-card>
+            <app-card [card]="eternal.card" [class.clickable]="validFieldEternal()[fieldIdx]" (click)="onSelectFieldEternal($index)"></app-card>
           }
         </div>
       </div>

@@ -30,10 +30,6 @@
         .clickable {
           position: relative;
           
-          &:not(:hover) {
-            animation: float 1s ease-in-out infinite alternate;
-          }
-
           &:hover {
             top: -5px;
             box-shadow:
@@ -52,5 +48,41 @@
     app-card {
       margin-right: 3px;
     }
+  }
+}
+
+.field-card {
+  transition: box-shadow 0.2s ease, background-color 0.2s ease;
+  border-radius: 8px;
+
+  &.valid-target {
+    animation: glowPulse 1.5s ease-in-out infinite;
+
+    &.hovered-target {
+      box-shadow: 0 0 0 4px rgba(76, 175, 80, 1);
+      background-color: rgba(76, 175, 80, 0.3);
+      transform: scale(1.03);
+      animation: none;
+    }
+  }
+
+  &:not(.valid-target) {
+    &.hovered-target {
+      box-shadow: 0 0 0 4px rgb(175, 76, 76);
+      background-color: rgba(175, 76, 76, 0.3);
+      transform: scale(1.03);
+      animation: none;
+    }
+  }
+}
+
+@keyframes glowPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.4), 0 0 8px 2px rgba(76, 175, 80, 0.3);
+    background-color: rgba(76, 175, 80, 0.08);
+  }
+  50% {
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.9), 0 0 20px 6px rgba(76, 175, 80, 0.6);
+    background-color: rgba(76, 175, 80, 0.2);
   }
 }

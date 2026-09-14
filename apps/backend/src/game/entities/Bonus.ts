@@ -1,5 +1,5 @@
 import { Player } from "./Player";
-import { SelectFieldState } from "../PlayerState/SelectFieldState";
+import { Camp } from "./Rule";
 
 export interface Bonus {
   get(player: Player): void;
@@ -7,7 +7,7 @@ export interface Bonus {
 
 export class CampBonus implements Bonus {
   get(player: Player) {
-    player.changeState(new SelectFieldState());
+    player.hand.push(new Camp().card);
   }
 }
 

@@ -51,16 +51,24 @@ export class Game extends EventEmitter {
     this.players.find((p: Player) => p.id == id)!.state.selectCard(cardIdx);
   }
 
+  dragCard(id: string, cardIdx: number) {
+    this.players.find((p: Player) => p.id == id)!.state.dragCard(cardIdx);
+  }
+
   selectFieldCard(id: string, fieldIdx: number, cardIdx: number) {
     this.players.find((p: Player) => p.id == id)!.state.selectFieldCard(fieldIdx, cardIdx);
   }
 
-  useCard(id: string, cardIdx: number) {
-    this.players.find((p: Player) => p.id == id)!.state.useCard(cardIdx);
+  useAbilityCard(id: string, cardIdx: number) {
+    this.players.find((p: Player) => p.id == id)!.state.useAbilityCard(cardIdx);
   }
 
-  selectField(id: string, fieldIdx: number) {
-    this.players.find((p: Player) => p.id == id)!.state.selectField(fieldIdx);
+  playCardToField(id: string, fieldIdx: number, cardIdx: number) {
+    this.players.find((p: Player) => p.id == id)!.state.playCardToField(fieldIdx, cardIdx);
+  }
+
+  playCardToRiver(id: string, cardIdx: number) {
+    this.players.find((p: Player) => p.id == id)!.state.playCardToRiver(cardIdx);
   }
 
   selectFieldEternal(id: string, eternalIdx: number) {

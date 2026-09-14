@@ -1,12 +1,13 @@
 import { Color, CardGroup, CardType, StateData } from "@shared/types";
 import { PlayerState } from "./PlayerState";
-import { Card } from "../entities/Card";
-import { AbilityCard } from "../entities/Abilities/ability-card";
 import { SelectPlayerState } from "./SelectPlayerState";
 import { SelectEternalState } from "./SelectEternalState";
+import { Card } from "../entities/Card";
+import { AbilityCard } from "../entities/Abilities/ability-card";
 
 export class MainState extends PlayerState {
   private selectedCardFlag: boolean[] = [];
+  private draggingCard: Card = null;
 
   constructor() {
     super();
@@ -20,33 +21,27 @@ export class MainState extends PlayerState {
     this.game.emitGameData();
   }
 
-  override useCard(cardIdx: number) {
-    let card: Card = this.player.hand[cardIdx]!;
-    if (card.group != CardGroup.MINOTAUR) {
-      card = this.player.playCard(cardIdx);
-      this.game.discard.push(card);
-    }
-    if (card instanceof AbilityCard) {
-      card.play(this.player);
-    }
+  override dragCard(cardIdx: number): void {
+    this.draggingCard = this.player.hand[cardIdx];
     this.game.emitGameData();
   }
 
-  override selectField(fieldIdx: number): void {
-    let cardIdx: number = this.selectedCardFlag.findIndex((flag) => flag);
-    let card: Card = this.player.playCard(cardIdx);
-    
-    let isRiver: boolean = fieldIdx == 3;
-    if (isRiver) {
-      this.game.river.setCard(this.player, [card]);
-      this.player.turnEnd();
-      this.game.emitGameData();
-      return;
-    }
-
+  override playCardToField(fieldIdx: number, cardIdx: number): void {
+    const card: Card = this.player.playCard(cardIdx);
     this.game.fields[fieldIdx]!.setCard(card);
-    this.game.fields[fieldIdx]!.handleFieldComplete(this.player, fieldIdx);
+
+    if (card.type == CardType.RULE) {
+      this.game.fields[fieldIdx]!.isTransToCamp = true;
+    }
     
+    this.game.fields[fieldIdx]!.handleFieldComplete(this.player, fieldIdx);
+    this.game.emitGameData();
+  }
+
+  override playCardToRiver(cardIdx: number): void {
+    const card: Card = this.player.playCard(cardIdx);
+    this.game.river.setCard(this.player, [card]);
+    this.player.turnEnd();
     this.game.emitGameData();
   }
 
@@ -71,6 +66,18 @@ export class MainState extends PlayerState {
     this.game.emitGameData();
   }
 
+  override useAbilityCard(cardIdx: number) {
+    let card: Card = this.player.hand[cardIdx]!;
+    if (card.group != CardGroup.MINOTAUR) {
+      card = this.player.playCard(cardIdx);
+      this.game.discard.push(card);
+    }
+    if (card instanceof AbilityCard) {
+      card.play(this.player);
+    }
+    this.game.emitGameData();
+  }
+
   override getAvailableMove(): StateData {
     this.stateData.message = '請打出一張牌，或是使用愛心，或是生成水晶。';
     this.stateData.validField = this.getValidField();
@@ -81,36 +88,21 @@ export class MainState extends PlayerState {
   }
 
   private getValidField(): boolean[] {
-    let validField: boolean[] = [false, false, false, false];
+    let validField: boolean[] = [false, false, false];
 
-    let selectCardIdx: number[] = [];
-    for (let i = 0; i < this.selectedCardFlag.length; i++) {
-      if (this.selectedCardFlag[i]) {
-        selectCardIdx.push(i);
-      }
-    }
-    if (selectCardIdx.length != 1) { return validField; }
-
-    validField[3] = true;
-
-    let card: Card = this.player.hand[selectCardIdx[0]!]!;
-    if (card.type == CardType.ABILITY) {
-      return validField;
-    }
+    if (this.draggingCard === null) { return validField; }
     
     let cardValid = true;
     for (let eternal of this.game.eternals) {
-      let eternalValid = !eternal.isCurse || eternal.isValid(card);
+      let eternalValid = !eternal.isCurse || eternal.isValid(this.draggingCard);
       cardValid = cardValid && eternalValid;
     }
-    if (!cardValid) {
-      return validField;
-    }
+    if (!cardValid) { return validField; }
     
     // Field Rule
     let idx: number = 0;
     for (let field of this.game.fields) {
-      if (field.checkRule(card)) {
+      if (field.checkRule(this.draggingCard)) {
         validField[idx] = true;
       }
       idx++;

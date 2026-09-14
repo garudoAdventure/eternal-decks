@@ -23,14 +23,16 @@ export class PlayerState {
   }
 
   selectCard(cardIdx: number) {}
+  dragCard(cardIdx: number) {}
+  playCardToField(fieldIdx: number, cardIdx: number) {}
+  playCardToRiver(cardIdx: number) {}
   selectFieldCard(fieldIdx: number, cardIdx: number) {}
-  useCard(cardIdx: number) {}
-  selectField(fieldIdx: number) {}
   selectHeart(heartIdx: number) {}
   selectJewel(jewelIdx: number) {}
   selectEternal(eternalIdx: number) {}
   selectFieldEternal(eternalIdx: number) {}
   selectPlayer(playerId: string) {}
+  useAbilityCard(cardIdx: number) {}
   confirmAction() {}
   rotateCard(cardIdx: number) {
     this.player.hand[cardIdx]!.rotate();

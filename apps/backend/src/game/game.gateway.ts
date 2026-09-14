@@ -46,6 +46,15 @@ export class GameGateway implements OnGatewayDisconnect {
     game.selectCard(client.data.playerId, data.cardIdx);
   }
 
+  @SubscribeMessage(GameEvent.DRAG_CARD)
+  dragCard(
+    @MessageBody() data: { roomId: string, cardIdx: number },
+    @ConnectedSocket() client
+  ) {
+    const game = this.gameManager.getGameById(data.roomId);
+    game.dragCard(client.data.playerId, data.cardIdx);
+  }
+
   @SubscribeMessage(GameEvent.SELECT_FIELD_CARD)
   selectFieldCard(
     @MessageBody() data: { roomId: string, fieldIdx: number, cardIdx: number },
@@ -55,13 +64,22 @@ export class GameGateway implements OnGatewayDisconnect {
     game.selectFieldCard(client.data.playerId, data.fieldIdx, data.cardIdx);
   }
 
-  @SubscribeMessage(GameEvent.SELECT_FIELD)
-  selectField(
-    @MessageBody() data: { roomId: string, fieldIdx: number },
+  @SubscribeMessage(GameEvent.PLAY_CARD_TO_FIELD)
+  playCardToField(
+    @MessageBody() data: { roomId: string, fieldIdx: number, cardIdx: number },
     @ConnectedSocket() client
   ) {
     const game = this.gameManager.getGameById(data.roomId);
-    game.selectField(client.data.playerId, data.fieldIdx);
+    game.playCardToField(client.data.playerId, data.fieldIdx, data.cardIdx);
+  }
+
+  @SubscribeMessage(GameEvent.PLAY_CARD_TO_RIVER)
+  playCardToRiver(
+    @MessageBody() data: { roomId: string, cardIdx: number },
+    @ConnectedSocket() client
+  ) {
+    const game = this.gameManager.getGameById(data.roomId);
+    game.playCardToRiver(client.data.playerId, data.cardIdx);
   }
 
   @SubscribeMessage(GameEvent.SELECT_FIELD_ETERNAL)
@@ -110,12 +128,12 @@ export class GameGateway implements OnGatewayDisconnect {
   }
 
   @SubscribeMessage(GameEvent.USE_CARD)
-  useCard(
+  useAbilityCard(
     @MessageBody() data: { roomId: string, cardIdx: number },
     @ConnectedSocket() client
   ) {
     const game = this.gameManager.getGameById(data.roomId);
-    game.useCard(client.data.playerId, data.cardIdx);
+    game.useAbilityCard(client.data.playerId, data.cardIdx);
   }
 
   @SubscribeMessage(GameEvent.ROTATE_CARD)

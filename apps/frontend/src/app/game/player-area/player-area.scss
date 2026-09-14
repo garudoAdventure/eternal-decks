@@ -100,3 +100,22 @@
     }
   }
 }
+
+.cdk-drag {
+  cursor: grab;
+
+  &:not(.cdk-drag-dragging) {
+    transition: transform 0.2s ease;
+  }
+
+  &.cdk-drag-dragging {
+    cursor: grabbing;
+    z-index: 1000;
+    transform: scale(1.15);
+    filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.3));
+  }
+}
+
+.cdk-drag-placeholder {
+  opacity: 0.3;
+}

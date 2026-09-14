@@ -1,15 +1,14 @@
 <div class="river-container">
-  <div class="river-card">
+  <div class="river-card"
+    [appBoardRef]="getFieldKey()"
+    [class.valid-target]="isValidTarget()"
+    [class.hovered-target]="isHovered()"
+  >
     @for(card of river().cards; track $index) {
       <app-card [card]="card"
         [class.clickable]="validRiverCard()"
         (click)="onSelectCard($index)"
       ></app-card>
-    }
-    @if (validField()[3]) {
-      <div class="hint-card"
-        (click)="onSelectField(3)">
-      </div>
     }
   </div>
   <div class="river-rare-card">
