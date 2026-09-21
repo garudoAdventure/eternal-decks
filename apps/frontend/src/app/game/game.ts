@@ -4,8 +4,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { GameEvent } from '@shared/types';
 import { SocketService } from '../core/socket.service';
 import { Field } from './field/field';
-import { River } from './River/river';
-import { Discard } from './Discard/discard';
+import { River } from './river/river';
+import { Discard } from './discard/discard';
 import { PlayerArea } from './player-area/player-area';
 import { ReviveArea } from './revive-area/revive-area';
 import { JewelArea } from './jewel-area/jewel-area';
@@ -13,12 +13,14 @@ import { StageArea } from './stage-area/stage-area';
 import { HeartArea } from './heart-area/heart-area';
 import { GameBoardStateService } from './gameBoardState.service';
 import { GameActionStateService } from './gameActionState.service';
+import { CardAnimationOverlay } from './animation-overlay/card-animation-overlay/card-animation-overlay';
 
 @Component({
   selector: 'app-game',
   imports: [
     CommonModule, MatButtonModule,
-    ReviveArea, Field, River, Discard, PlayerArea, JewelArea, StageArea, HeartArea
+    ReviveArea, Field, River, Discard, PlayerArea, JewelArea, StageArea, HeartArea,
+    CardAnimationOverlay
   ],
   templateUrl: './game.html',
   styleUrl: './game.scss',

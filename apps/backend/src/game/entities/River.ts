@@ -10,9 +10,9 @@ export class River {
 
   cards: Card[] = [];
   rareCards: Card[] = [
-    new Card(0, CardGroup.NONE, CardType.RARE, 0),
-    new Card(0, CardGroup.NONE, CardType.RARE, 0),
-    new Card(0, CardGroup.NONE, CardType.RARE, 0),
+    new Card(0, CardGroup.NONE, CardType.RARE),
+    new Card(0, CardGroup.NONE, CardType.RARE),
+    new Card(0, CardGroup.NONE, CardType.RARE),
   ];
 
   setCard(player: Player, cards: Card[]) {

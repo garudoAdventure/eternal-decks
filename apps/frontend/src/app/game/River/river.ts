@@ -34,7 +34,7 @@ export class River {
   }
 
   getFieldKey(): BoardRef {
-    return { type: BoardRefType.RIVER, index: 0 };
+    return { type: BoardRefType.RIVER };
   }
 
   onSelectCard(index: number) {

@@ -97,7 +97,7 @@ export class GameGateway implements OnGatewayDisconnect {
     @ConnectedSocket() client
   ) {
     const game = this.gameManager.getGameById(data.roomId);
-    game.selectFieldEternal(client.data.playerId, data.eternalIdx);
+    game.selectEternal(client.data.playerId, data.eternalIdx);
   }
 
   @SubscribeMessage(GameEvent.SELECT_JEWEL)

@@ -61,6 +61,7 @@
       position: relative;
       display: inline-block;
       margin-right: 5px;
+      animation: cardDrawIn 0.3s ease-out;
 
       .use-btn {
         display: none;
@@ -118,4 +119,15 @@
 
 .cdk-drag-placeholder {
   opacity: 0.3;
+}
+
+@keyframes cardDrawIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }

@@ -18,16 +18,24 @@ export class BoardRefRegistryService {
     return this.elements.get(this.serializeKey(boardRef))?.getBoundingClientRect() ?? null;
   }
 
-  private serializeKey(boardRef: BoardRef): string {
-    switch (boardRef.type) {
-      case BoardRefType.HAND:
-        return `hand-${boardRef.index}`;
-      case BoardRefType.FIELD:
-        return `field-${boardRef.index}`;
-      case BoardRefType.RIVER:
-        return `river`;
-      default:
-        return '';
+  getElement(boardRef: BoardRef): HTMLElement | null {
+    return this.elements.get(this.serializeKey(boardRef)) ?? null;
+  }
+
+ private serializeKey(ref: BoardRef): string {
+  switch (ref.type) {
+    case BoardRefType.HAND:
+      return `hand-${ref.playerId}-${ref.cardIdx}`;
+    case BoardRefType.FIELD:
+      return `field-${ref.fieldIdx}`;
+    case BoardRefType.RIVER:
+      return 'river';
+    case BoardRefType.DISCARD:
+      return 'discard';
+    default: {
+      const exhaustiveCheck: never = ref;
+      throw new Error(`未處理的 BoardRef type: ${JSON.stringify(exhaustiveCheck)}`);
     }
   }
+}
 }

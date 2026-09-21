@@ -33,6 +33,13 @@ export class MainState extends PlayerState {
     if (card.type == CardType.RULE) {
       this.game.fields[fieldIdx]!.isTransToCamp = true;
     }
+
+    this.game.emit('playCardAnimation', {
+      playerId: this.player.id,
+      cardIdx: cardIdx,
+      card: card.getData(),
+      fieldIdx: fieldIdx
+    });
     
     this.game.fields[fieldIdx]!.handleFieldComplete(this.player, fieldIdx);
     this.game.emitGameData();

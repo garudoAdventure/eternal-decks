@@ -97,7 +97,7 @@ export function createGhostDeck(): Card[] {
     new Card(4, CardGroup.GHOST, CardType.NUMBER, 6, [Color.GREEN, Color.GREEN]),
     new Card(5, CardGroup.GHOST, CardType.NUMBER, 8, [Color.GREEN, Color.GREEN]),
     new Card(6, CardGroup.GHOST, CardType.NUMBER, 9, [Color.PURPLE, Color.PURPLE]),
-    new Card(7, CardGroup.GHOST, CardType.RARE, 0),
+    new Card(7, CardGroup.GHOST, CardType.RARE),
     new GhostAbility(),
   ];
 }
@@ -110,7 +110,7 @@ export function createSkeletonDeck(): Card[] {
     new Card(4, CardGroup.SKELETON, CardType.NUMBER, 4, [Color.PURPLE, Color.PURPLE]),
     new Card(5, CardGroup.SKELETON, CardType.NUMBER, 7, [Color.PURPLE, Color.PURPLE]),
     new Card(6, CardGroup.SKELETON, CardType.NUMBER, 9, [Color.YELLOW, Color.YELLOW]),
-    new Card(7, CardGroup.SKELETON, CardType.RARE, 0),
+    new Card(7, CardGroup.SKELETON, CardType.RARE),
     new SkeletonAbility(),
   ];
 }
@@ -136,8 +136,8 @@ export function createVampireDeck(): Card[] {
     new Card(4, CardGroup.VAMPIRE, CardType.NUMBER, 3, [Color.YELLOW, Color.YELLOW]),
     new Card(5, CardGroup.VAMPIRE, CardType.NUMBER, 5, [Color.RED, Color.RED]),
     new Card(6, CardGroup.VAMPIRE, CardType.NUMBER, 8, [Color.RED, Color.RED]),
-    new Card(7, CardGroup.VAMPIRE, CardType.RARE, 0),
-    new Card(8, CardGroup.VAMPIRE, CardType.RARE, 0),
+    new Card(7, CardGroup.VAMPIRE, CardType.RARE),
+    new Card(8, CardGroup.VAMPIRE, CardType.RARE),
   ];
 }
 

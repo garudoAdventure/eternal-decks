@@ -32,11 +32,11 @@ export class Field {
 
   isHovered(fieldIdx: number): boolean {
     const hoveredTarget = this.dragState.hoveredTarget();
-    return hoveredTarget?.type == BoardRefType.FIELD && hoveredTarget.index == fieldIdx;
+    return hoveredTarget?.type == BoardRefType.FIELD && hoveredTarget.fieldIdx == fieldIdx;
   }
 
-  getFieldKey(index: number): BoardRef {
-    return { type: BoardRefType.FIELD, index };
+  getFieldKey(fieldIdx: number): BoardRef {
+    return { type: BoardRefType.FIELD, fieldIdx };
   }
 
   onSelectFieldCard(fieldIdx: number, cardIdx: number) {

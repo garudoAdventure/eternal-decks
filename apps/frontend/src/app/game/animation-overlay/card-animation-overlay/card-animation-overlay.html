@@ -1,0 +1,12 @@
+@for (animCard of animationCards(); track animCard.id) {
+  <div class="animation-card"
+    [style.--from-top.px]="animCard.fromRect.top"
+    [style.--from-left.px]="animCard.fromRect.left"
+    [style.--to-top.px]="animCard.toRect.top"
+    [style.--to-left.px]="animCard.toRect.left"
+    [style.--from-width.px]="animCard.fromRect.width"
+    [style.--to-width.px]="animCard.toRect.width"
+  >
+    <app-card [card]="animCard.card"></app-card>
+  </div>
+}

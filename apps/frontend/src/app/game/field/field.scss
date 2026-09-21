@@ -21,6 +21,12 @@
         app-card {
           display: inline-block;
         }
+
+        .empty-slot-card {
+          display: inline-block;
+          width: 90px;
+          height: 130px;
+        }
       }
 
       .field-eternal {

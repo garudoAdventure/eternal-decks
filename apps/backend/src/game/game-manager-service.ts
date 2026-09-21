@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { Server } from "socket.io";
 import { Game } from "./entities/Game";
 import { Player } from "./entities/Player";
-import { Color, RoomPlayer } from "@shared/types";
+import { PlayCardAnimationEvent, Color, RoomPlayer } from "@shared/types";
 
 @Injectable()
 export class GameManagerService {
@@ -16,19 +16,22 @@ export class GameManagerService {
     const color = [Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW];
     let idx = 0;
     for (const player of players) {
-      game.addPlayer(new Player(
-        player.playerId,
-        player.socketId,
-        player.name,
-        color[idx],
-        game
-      ));
+      game.addPlayer(
+        new Player(player.playerId, player.socketId, player.name, color[idx], game)
+      );
       idx++;
     }
     game.initPlayers();
 
     game.on('stateChanged', () => {
       this.broadcastGameData(game, server);
+    });
+
+    game.on('playCardAnimation', (event: PlayCardAnimationEvent) => {
+      for (let player of game.players) {
+        const playerSocket = server.sockets.sockets.get(player.socketId);
+        playerSocket.emit('playCardAnimation', event);
+      }
     });
 
     game.on('gameOver', () => {

@@ -9,8 +9,8 @@ import { Card } from '../Card/card';
   styleUrl: './stage-area.scss',
 })
 export class StageArea {
-  private gamebBoardState = inject(GameBoardStateService);
+  private gameBoardState = inject(GameBoardStateService);
 
-  starCard = this.gamebBoardState.starCard;
-  getStar = computed(() => this.gamebBoardState.stars().filter((isGet) => isGet));
+  starCard = this.gameBoardState.starCard;
+  getStar = computed(() => this.gameBoardState.stars().filter((isGet) => isGet));
 }

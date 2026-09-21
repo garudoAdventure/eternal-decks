@@ -6,7 +6,7 @@ import { Player } from './Player';
 import { Card } from './Card';
 import { CampBonus, HeartBonus, StarBonus } from './Bonus';
 import { Cave, Forest, GrassLand, Lake, Mountain, RiverSide } from './Rule';
-import { DummyEternal, Eternal, Ghost, King, Kraken, Medusa, Mermaid, Minotaur, Phoenix, Skeleton, Witch } from './Eternal';
+import { Eternal, Ghost, King, Kraken, Medusa, Mermaid, Minotaur, Phoenix, Skeleton, Witch } from './Eternal';
 import { createInitDeck } from '../Card/cards.db';
 import { IdleState } from '../PlayerState/PlayerState';
 import { MainState } from '../PlayerState/MainState';
@@ -22,7 +22,7 @@ export class Game extends EventEmitter {
   genJewels: boolean[] = new Array(6).fill(false);
   usedHeart: boolean[] = new Array(3).fill(false);
   getStar: boolean[] = new Array(6).fill(false);
-  starCard: Card[] = new Array(3).fill(new Card());
+  starCard: Card[] = [];
   discard: Card[] = [];
   getCampBonus: boolean = false;
 

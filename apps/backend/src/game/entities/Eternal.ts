@@ -11,7 +11,7 @@ export class Eternal {
   isValid(card : Card): boolean { return true; }
   release() {
     this.isRelease = true;
-    this.card.id = 10;
+    this.card.subID = 10;
   }
   getData(): EternalData {
     return {
@@ -20,10 +20,6 @@ export class Eternal {
       isCurse: this.isCurse
     };
   }
-}
-
-export class DummyEternal extends Eternal {
-  card: Card = new Card();
 }
 
 export class Phoenix extends Eternal {

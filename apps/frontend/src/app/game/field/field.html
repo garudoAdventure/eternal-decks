@@ -11,6 +11,7 @@
           @for(card of field.cards; track $index) {
             <app-card [card]="card" (click)="onSelectFieldCard(fieldIdx, $index)"></app-card>
           }
+          <div class="empty-slot-card"></div>
         </div>
         <div class="field-eternal">
           @for(eternal of field.eternals; track $index) {

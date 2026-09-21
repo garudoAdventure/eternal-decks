@@ -1,7 +1,8 @@
 import { CardGroup, CardType, CardData, Color } from "@shared/types";
 
 export class Card {
-  id: number = 0;
+  id: string = '';
+  subID: number = 0;
   group: CardGroup = CardGroup.NONE;
   type: CardType = CardType.NONE;
   number: number = 0;
@@ -9,17 +10,19 @@ export class Card {
   isRotate: boolean = false;
 
   constructor(
-    id?: number,
-    group?: CardGroup,
-    type?: CardType,
+    subID: number,
+    group: CardGroup,
+    type: CardType,
     number?: number,
     color?: Color[]
   ) {
-    if (id) { this.id = id; }
-    if (group) { this.group = group };
-    if (type) { this.type = type };
+    this.subID = subID;
+    this.group = group;
+    this.type = type;
     if (number) { this.number = number; }
     if (color) { this.color = color; }
+
+    this.id = `${ group }-${ subID }`;
   }
 
   get isRare(): boolean {
@@ -39,6 +42,7 @@ export class Card {
   getData(): CardData {
     return {
       id: this.id,
+      subID: this.subID,
       group: this.group,
       type: this.type,
       number: this.number,

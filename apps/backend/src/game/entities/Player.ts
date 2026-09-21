@@ -61,7 +61,8 @@ export class Player {
     let handData: CardData[] = [];
     for (let i = 0; i < this.hand.length; i++) {
       handData.push({
-        id: 0,
+        id: this.hand[i]!.id,
+        subID: 0,
         group: this.hand[i]!.group,
         type: this.hand[i]!.type,
         isRotate: this.hand[i]!.isRotate

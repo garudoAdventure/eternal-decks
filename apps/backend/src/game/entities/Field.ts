@@ -18,7 +18,6 @@ export class Field {
   cards: Card[] = [];
   eternals: Eternal[];
   bonus: Bonus;
-  currentIdx: number = 0;
   isTransToCamp: boolean = false;
   isFixedRule: boolean = false;
 
@@ -47,8 +46,7 @@ export class Field {
   }
 
   setCard(card: Card) {
-    this.cards[this.currentIdx] = card;
-    this.currentIdx++;
+    this.cards.push(card);
     this.currentCardVal = this.rule[0]!.caclCurrentVal(this.currentCardVal, card);
   }
 
@@ -64,7 +62,7 @@ export class Field {
   }
 
   handleFieldComplete(player: Player, fieldIdx: number) {
-    if (this.currentIdx + this.eternals.length != 7) {
+    if (this.cards.length + this.eternals.length != 7) {
       player.turnEnd();
       return;
     }

@@ -14,20 +14,22 @@
         </div>
         @if (playerIdx != 0) {
           <div class="hand-card">
-            @for (card of player.hand; track $index) {
-              <div class="card-container">
+            @for (card of player.hand; track card.id; let cardIdx = $index) {
+              <div class="card-container"
+                [appBoardRef]="getHandKey(player.id, cardIdx)"
+              >
                 <app-card [card]="card"></app-card>
               </div>
             }
           </div>
         } @else {
           <div class="hand-card">
-            @for (card of player.hand; track $index; let cardIdx = $index) {
+            @for (card of player.hand; track card.id; let cardIdx = $index) {
               <div class="card-container"
                 [class.selected]="selectedCard()[cardIdx]"
                 (click)="resetCardDragDistance()"
                 (mouseup)="onSelectCard(cardIdx)"
-                [appBoardRef]="getHandKey(cardIdx)"
+                [appBoardRef]="getHandKey(player.id, cardIdx)"
                 cdkDrag
                 [cdkDragDisabled]="card.type == CardType.ABILITY"
                 [cdkDragData]="cardIdx"

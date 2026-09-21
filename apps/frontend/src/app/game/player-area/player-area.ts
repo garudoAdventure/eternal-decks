@@ -69,8 +69,8 @@ export class PlayerArea {
     });
   }
 
-  getHandKey(index: number): BoardRef {
-    return { type: BoardRefType.HAND, index };
+  getHandKey(playerId: string, cardIdx: number): BoardRef {
+    return { type: BoardRefType.HAND, playerId, cardIdx };
   }
 
   resetCardDragDistance() {
@@ -114,7 +114,7 @@ export class PlayerArea {
         cardIdx
       });
     } else if (target.type == BoardRefType.FIELD) {
-      const fieldIdx = target.index;
+      const fieldIdx = target.fieldIdx;
       if (this.validField()[fieldIdx]) {
         this.socketService.emit(GameEvent.PLAY_CARD_TO_FIELD, {
           roomId: sessionStorage.getItem('roomId'),
@@ -127,13 +127,13 @@ export class PlayerArea {
 
   private detectDropTarget(point: { x: number; y: number }): BoardRef | null {
     for (let i = 0; i < 3; i++) {
-      const rect = this.registry.getRect({ type: BoardRefType.FIELD, index: i });
+      const rect = this.registry.getRect({ type: BoardRefType.FIELD, fieldIdx: i });
       if (rect && this.isPointInRect(point, rect)) {
-        return { type: BoardRefType.FIELD, index: i };
+        return { type: BoardRefType.FIELD, fieldIdx: i };
       }
     }
-    const riverRect = this.registry.getRect({ type: BoardRefType.RIVER, index: 0 });
-    if (riverRect && this.isPointInRect(point, riverRect)) return { type: BoardRefType.RIVER, index: 0 };
+    const riverRect = this.registry.getRect({ type: BoardRefType.RIVER });
+    if (riverRect && this.isPointInRect(point, riverRect)) return { type: BoardRefType.RIVER };
     return null;
   }
 
