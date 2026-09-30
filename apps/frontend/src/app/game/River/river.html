@@ -1,19 +1,23 @@
 <div class="river-container">
   <div class="river-card"
-    [appBoardRef]="getFieldKey()"
+    [appFieldDropZone]="'river'"
     [class.valid-target]="isValidTarget()"
     [class.hovered-target]="isHovered()"
   >
     @for(card of river().cards; track $index) {
-      <app-card [card]="card"
+      <div class="card-m"
         [class.clickable]="validRiverCard()"
         (click)="onSelectCard($index)"
-      ></app-card>
+      >
+        <app-card [card]="card"></app-card>
+      </div>
     }
   </div>
   <div class="river-rare-card">
     @for(card of river().rareCards; track $index) {
-      <app-card [card]="card"></app-card>
+      <div class="card-m">
+        <app-card [card]="card"></app-card>
+      </div>
     }
   </div>
   <div class="card gameOver"></div>

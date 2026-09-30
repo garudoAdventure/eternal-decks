@@ -1,18 +1,21 @@
-import { Component, inject } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GameEvent } from '@shared/types';
 import { Card } from '../Card/card';
 import { SocketService } from '../../core/socket.service';
 import { GameBoardStateService } from '../gameBoardState.service';
 import { GameActionStateService } from '../gameActionState.service';
-import { BoardRefDirective } from '../Board-ref/board-ref.directive';
-import { DragStateService } from '../../core/drag-state.service';
-import { BoardRefType } from '../Board-ref/board-ref.enum';
-import { BoardRef } from '../Board-ref/board-ref.interface';
+import { FieldDropZoneDirective } from './field-drop-zone.directive';
+import { FieldDropZoneService } from './field-drop-zone.service';
+import { AnimationService } from '../animation.service';
+import gsap from 'gsap';
+import { Flip } from 'gsap/Flip';
+
+gsap.registerPlugin(Flip);
 
 @Component({
   selector: 'app-field',
-  imports: [CommonModule, Card, BoardRefDirective],
+  imports: [CommonModule, Card, FieldDropZoneDirective],
   templateUrl: './field.html',
   styleUrl: './field.scss',
 })
@@ -20,23 +23,29 @@ export class Field {
   private socketService = inject(SocketService);
   private gameBoardState = inject(GameBoardStateService);
   private gameActionState = inject(GameActionStateService);
-  private dragState = inject(DragStateService);
+  private dropZone = inject(FieldDropZoneService);
+
+  private animationService = inject(AnimationService);
 
   fields = this.gameBoardState.fields;
   validField = this.gameActionState.validField;
   validFieldEternal = this.gameActionState.validFieldEternal;
+                  
+  constructor() {
+    effect(() => {
+      this.fields();
+      requestAnimationFrame(() => {
+        this.animationService.playCardAnim();
+      });
+    });
+  }
 
   isValidTarget(fieldIdx: number): boolean {
-    return this.dragState.isDragging() && this.validField()[fieldIdx];
+    return this.dropZone.isDragging() && this.validField()[fieldIdx];
   }
 
   isHovered(fieldIdx: number): boolean {
-    const hoveredTarget = this.dragState.hoveredTarget();
-    return hoveredTarget?.type == BoardRefType.FIELD && hoveredTarget.fieldIdx == fieldIdx;
-  }
-
-  getFieldKey(fieldIdx: number): BoardRef {
-    return { type: BoardRefType.FIELD, fieldIdx };
+    return this.dropZone.isHovered(fieldIdx);
   }
 
   onSelectFieldCard(fieldIdx: number, cardIdx: number) {
@@ -47,10 +56,22 @@ export class Field {
     });
   }
 
-  onSelectFieldEternal(index: number) {
-    this.socketService.emit(GameEvent.SELECT_FIELD_ETERNAL, {
-      roomId: sessionStorage.getItem('roomId'),
-      eternalIdx: index,
+  onSelectFieldEternal(index: number, fieldIdx: number, cardId: string) {
+    const state = Flip.getState(`[data-flip-id="card-${cardId}"] .card`);
+    Flip.from(state, {
+      rotateY: 180,
+      duration: 0.5,
+      clearProps: false,
+      onComplete:() => {
+        this.animationService.addState(cardId);
+        this.fields()[fieldIdx].cards.forEach(card => {
+          this.animationService.addState(card.id);
+        });
+        this.socketService.emit(GameEvent.SELECT_FIELD_ETERNAL, {
+          roomId: sessionStorage.getItem('roomId'),
+          eternalIdx: index,
+        });
+      }
     });
   }
 }

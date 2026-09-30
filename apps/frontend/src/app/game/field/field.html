@@ -1,21 +1,38 @@
 <div class="field-container">
   @for(field of fields(); track $index; let fieldIdx = $index) {
     <div class="field">
-      <div class="field-rule"><app-card [card]="field.rule"></app-card></div>
+      <div class="field-rule">
+        <div class="card-m">
+          <app-card [card]="field.rule"></app-card>
+        </div>
+      </div>
       <div class="field-card-container">
         <div class="field-card"
-          [appBoardRef]="getFieldKey(fieldIdx)"
+          [appFieldDropZone]="fieldIdx"
           [class.valid-target]="isValidTarget(fieldIdx)"
           [class.hovered-target]="isHovered(fieldIdx)"
         >
-          @for(card of field.cards; track $index) {
-            <app-card [card]="card" (click)="onSelectFieldCard(fieldIdx, $index)"></app-card>
+          @for(card of field.cards; track card.id; let cardIdx = $index) {
+            <div class="card-m"
+              [attr.data-flip-id]="'card-' + card.id"
+              (click)="onSelectFieldCard(fieldIdx, $index)"
+            >
+              <app-card [card]="card"></app-card>
+            </div>
           }
-          <div class="empty-slot-card"></div>
+          @if (field.cards.length < 7 - field.eternals.length) {
+            <div class="empty-slot-card"></div>
+          }
         </div>
         <div class="field-eternal">
-          @for(eternal of field.eternals; track $index) {
-            <app-card [card]="eternal.card" [class.clickable]="validFieldEternal()[fieldIdx]" (click)="onSelectFieldEternal($index)"></app-card>
+          @for(eternal of field.eternals; track eternal.card.id) {
+            <div class="card-m"
+              [class.clickable]="validFieldEternal()[fieldIdx]"
+              [attr.data-flip-id]="'card-' + eternal.card.id"
+              (click)="onSelectFieldEternal($index, fieldIdx, eternal.card.id)"
+            >
+              <app-card [card]="eternal.card"></app-card>
+            </div>
           }
         </div>
       </div>

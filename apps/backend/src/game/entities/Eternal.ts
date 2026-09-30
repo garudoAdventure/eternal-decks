@@ -11,6 +11,7 @@ export class Eternal {
   isValid(card : Card): boolean { return true; }
   release() {
     this.isRelease = true;
+    this.card.isBack = true;
     this.card.subID = 10;
   }
   getData(): EternalData {

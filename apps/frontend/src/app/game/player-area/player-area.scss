@@ -1,3 +1,5 @@
+@use '../global.scss';
+
 #player-container {
   display: flex;
   flex-direction: column;
@@ -63,16 +65,7 @@
       margin-right: 5px;
       animation: cardDrawIn 0.3s ease-out;
 
-      .use-btn {
-        display: none;
-        width: 100%;
-        font-size: 15px;
-        text-align: center;
-        background-color: white;
-        border-radius: 0.5em;
-      }
-
-      .rotate-btn {
+      .rotate-btn, .use-btn {
         display: none;
         position: absolute;
         top: calc(50% - 12px);

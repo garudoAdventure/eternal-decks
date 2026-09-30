@@ -2,22 +2,18 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { CdkDrag, CdkDragEnd, CdkDragMove, CdkDragStart } from '@angular/cdk/drag-drop'
 import { Color, GameEvent, CardSize, CardType } from '@shared/types';
 import { Card } from '../Card/card';
 import { SocketService } from '../../core/socket.service';
 import { GameBoardStateService } from '../gameBoardState.service';
 import { GameActionStateService } from '../gameActionState.service';
-
-import { CdkDrag, CdkDragEnd, CdkDragMove, CdkDragStart } from '@angular/cdk/drag-drop'
-import { DragStateService } from '../../core/drag-state.service';
-import { BoardRefRegistryService } from '../Board-ref/board-ref-registry.service';
-import { BoardRefDirective } from '../Board-ref/board-ref.directive';
-import { BoardRefType } from '../Board-ref/board-ref.enum';
-import { BoardRef } from '../Board-ref/board-ref.interface';
+import { FieldDropZoneService } from '../field/field-drop-zone.service';
+import { AnimationService } from '../animation.service';
 
 @Component({
   selector: 'app-player-area',
-  imports: [CommonModule, MatCardModule, MatIconModule, Card, BoardRefDirective, CdkDrag],
+  imports: [CommonModule, MatCardModule, MatIconModule, Card, CdkDrag],
   templateUrl: './player-area.html',
   styleUrl: './player-area.scss',
 })
@@ -28,9 +24,8 @@ export class PlayerArea {
   private socketService = inject(SocketService);
   private gameBoardState = inject(GameBoardStateService);
   private gameActionState = inject(GameActionStateService);
-
-  private registry = inject(BoardRefRegistryService);
-  private dragState = inject(DragStateService);
+  private animationService = inject(AnimationService);
+  private dropZone = inject(FieldDropZoneService);
 
   players = this.gameBoardState.players;
   selectedCard = this.gameActionState.selectedCard;
@@ -69,17 +64,14 @@ export class PlayerArea {
     });
   }
 
-  getHandKey(playerId: string, cardIdx: number): BoardRef {
-    return { type: BoardRefType.HAND, playerId, cardIdx };
-  }
-
   resetCardDragDistance() {
     this.cardDragDistance = 0;
   }
 
   onDragStarted(event: CdkDragStart, idx: number) {
     this.draggingCardIdx = idx;
-    this.dragState.startDrag();
+    this.dropZone.startDrag();
+
     this.socketService.emit(GameEvent.DRAG_CARD, {
       roomId: sessionStorage.getItem('roomId'),
       cardIdx: idx
@@ -87,61 +79,38 @@ export class PlayerArea {
   }
 
   onDragMoved(event: CdkDragMove) {
-    const point = event.pointerPosition;
-    const target = this.detectDropTarget(point);
-    this.dragState.updateHover(target);
+    this.dropZone.updateDragPos(event.pointerPosition);
 
     const x = event.distance.x;
     const y = event.distance.y;
     this.cardDragDistance = Math.sqrt(x * x + y * y);
   }
 
-  onDragEnded(event: CdkDragEnd) {
+  onDragEnded(event: CdkDragEnd, cardId: string) {
     const cardIdx = this.draggingCardIdx;
     this.draggingCardIdx = null;
 
-    const target = this.dragState.hoveredTarget();
-    this.dragState.endDrag();
-
-    // 不論成功失敗,先把拖曳元素視覺歸位(實際卡片是否還在,交給資料更新決定)
+    const target = this.dropZone.endDrag();
     event.source.reset();
 
-    if (cardIdx === null || target === null) return;
+    if (target === null) return;
 
-    if (target.type == BoardRefType.RIVER) {
+    if (target === 'river') {
       this.socketService.emit(GameEvent.PLAY_CARD_TO_RIVER, {
         roomId: sessionStorage.getItem('roomId'),
         cardIdx
       });
-    } else if (target.type == BoardRefType.FIELD) {
-      const fieldIdx = target.fieldIdx;
+    } else {
+      const fieldIdx = target;
       if (this.validField()[fieldIdx]) {
+        this.animationService.addState(cardId);
         this.socketService.emit(GameEvent.PLAY_CARD_TO_FIELD, {
           roomId: sessionStorage.getItem('roomId'),
           fieldIdx,
           cardIdx
         });
       }
-    }    
-  }
-
-  private detectDropTarget(point: { x: number; y: number }): BoardRef | null {
-    for (let i = 0; i < 3; i++) {
-      const rect = this.registry.getRect({ type: BoardRefType.FIELD, fieldIdx: i });
-      if (rect && this.isPointInRect(point, rect)) {
-        return { type: BoardRefType.FIELD, fieldIdx: i };
-      }
     }
-    const riverRect = this.registry.getRect({ type: BoardRefType.RIVER });
-    if (riverRect && this.isPointInRect(point, riverRect)) return { type: BoardRefType.RIVER };
-    return null;
-  }
-
-  private isPointInRect(point: { x: number; y: number }, rect: DOMRect): boolean {
-    return point.x >= rect.left &&
-      point.x <= rect.right &&
-      point.y >= rect.top &&
-      point.y <= rect.bottom;
   }
 
   getColorStr(color: Color) {

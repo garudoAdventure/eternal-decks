@@ -1,6 +1,8 @@
 <div class="eternal-container">
   @for(eternal of eternals(); track $index) {
-    <div class="card-container">
+    <div class="card-container card-m"
+      [attr.data-flip-id]="'card-' + eternal.card.id"
+    >
       <app-card [card]="eternal.card"
         [class.clickable]="validEternal()[$index]"
         (click)="onSelectEternal($index)"

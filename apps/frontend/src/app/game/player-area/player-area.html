@@ -15,8 +15,8 @@
         @if (playerIdx != 0) {
           <div class="hand-card">
             @for (card of player.hand; track card.id; let cardIdx = $index) {
-              <div class="card-container"
-                [appBoardRef]="getHandKey(player.id, cardIdx)"
+              <div class="card-container card-m"
+                [attr.data-flip-id]="'card-' + card.id"
               >
                 <app-card [card]="card"></app-card>
               </div>
@@ -25,25 +25,26 @@
         } @else {
           <div class="hand-card">
             @for (card of player.hand; track card.id; let cardIdx = $index) {
-              <div class="card-container"
+              <div class="card-container card-l"
                 [class.selected]="selectedCard()[cardIdx]"
+                [attr.data-flip-id]="'card-' + card.id"
                 (click)="resetCardDragDistance()"
                 (mouseup)="onSelectCard(cardIdx)"
-                [appBoardRef]="getHandKey(player.id, cardIdx)"
+
                 cdkDrag
                 [cdkDragDisabled]="card.type == CardType.ABILITY"
                 [cdkDragData]="cardIdx"
                 (cdkDragStarted)="onDragStarted($event, cardIdx)"
                 (cdkDragMoved)="onDragMoved($event)"
-                (cdkDragEnded)="onDragEnded($event)"
+                (cdkDragEnded)="onDragEnded($event, card.id)"
               >
                 @if (card.type == CardType.ABILITY) {
-                  <app-card [card]="card" [size]="CardSize.L"></app-card>
-                  <div class="use-btn" (click)="useCard(cardIdx)">使用</div>
-                } @else {
-                  <div>
-                    <app-card [card]="card" [size]="CardSize.L"></app-card>
+                  <app-card [card]="card"></app-card>
+                  <div class="use-btn" (click)="useCard(cardIdx)">
+                    <mat-icon>check</mat-icon>
                   </div>
+                } @else {
+                  <app-card [card]="card"></app-card>
                   <div class="rotate-btn" (click)="rotateCard(cardIdx)">
                     <mat-icon>cached</mat-icon>
                   </div>

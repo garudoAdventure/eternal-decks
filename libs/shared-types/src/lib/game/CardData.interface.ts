@@ -6,7 +6,8 @@ export interface CardData {
   subID: number;
   group: CardGroup;
   type: CardType;
+  number: number;
+  color: Color[];
   isRotate: boolean;
-  number?: number;
-  color?: Color[];
+  isBack: boolean;
 }

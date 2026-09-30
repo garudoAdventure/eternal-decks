@@ -1,7 +1,6 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CardData, CardGroup, CardSize, CardType } from '@shared/types';
-import { GameService } from '../game.service';
+import { CardData, CardGroup, CardType } from '@shared/types';
 
 @Component({
   selector: 'app-card',
@@ -11,9 +10,6 @@ import { GameService } from '../game.service';
 })
 export class Card {
   @Input() card!: CardData;
-  @Input() size: CardSize = CardSize.M;
-
-  // gameService = inject(GameService);
 
   cardImg: string = '';
 
@@ -43,33 +39,29 @@ export class Card {
         imgUrl = './asset/card/rare/0.jpg';
         break;
       case CardType.RULE:
-        imgUrl = './asset/card/rule/' + card.id + '.jpg';
+        imgUrl = './asset/card/rule/' + card.subID + '.jpg';
+        break;
+      case CardType.ETERNAL:
+        imgUrl = './asset/card/' + this.getGroupStr(card.group) + '/front.jpg';
         break;
       default:
-        imgUrl = './asset/card/' + this.getGroupStr(card.group) + '/' + card.id + '.jpg';
+        imgUrl = './asset/card/' + this.getGroupStr(card.group) + '/deck/' + card.subID + '.jpg';
     }
     this.cardImg = imgUrl;
     return 'url(' + imgUrl + ')';
   }
 
-  getCardSize() {
-    let width = 0;
-    let height = 0;
-    switch(this.size) {
-      case CardSize.M:
-        width = 90;
-        height= 130;
+  getCardBackImg(card: CardData): string {
+    let imgUrl: string = '';
+    switch(card.type) {
+      case CardType.ETERNAL:
+        imgUrl = './asset/card/' + this.getGroupStr(card.group) + '/back.jpg';
         break;
-      case CardSize.L:
-        width = 108;
-        height= 156;
-        break;
-      case CardSize.XL:
-        width = 90;
-        height= 130;
-        break;
+      default:
+        imgUrl = './asset/card/' + this.getGroupStr(card.group) + '/deck/back.jpg';
     }
-    return { 'width': width + 'px', 'height': height + 'px' };
+
+    return 'url(' + imgUrl + ')';
   }
 
   private getGroupStr(group: CardGroup) {

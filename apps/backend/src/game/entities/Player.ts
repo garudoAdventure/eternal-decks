@@ -59,15 +59,18 @@ export class Player {
 
   getHiddenData(): PlayerData {
     let handData: CardData[] = [];
-    for (let i = 0; i < this.hand.length; i++) {
+    this.hand.forEach(card => {
       handData.push({
-        id: this.hand[i]!.id,
+        id: card.id,
         subID: 0,
-        group: this.hand[i]!.group,
-        type: this.hand[i]!.type,
-        isRotate: this.hand[i]!.isRotate
+        group: card.group,
+        type: card.type,
+        number: 0,
+        color: [Color.NONE, Color.NONE],
+        isRotate: false,
+        isBack: true
       });
-    }
+    });
     return {
       id: this.id,
       name: this.name,

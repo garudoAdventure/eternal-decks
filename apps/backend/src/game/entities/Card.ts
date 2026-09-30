@@ -8,6 +8,7 @@ export class Card {
   number: number = 0;
   color: Color[] = [Color.NONE, Color.NONE];
   isRotate: boolean = false;
+  isBack: boolean = false;
 
   constructor(
     subID: number,
@@ -34,9 +35,13 @@ export class Card {
     return this.color![0] != this.color![1];
   }
 
+  get cardColor(): Color[] {
+    return !this.isRotate ?
+      [this.color[0], this.color[1]] : [this.color[1], this.color[0]];
+  }
+
   rotate() {
     this.isRotate = !this.isRotate;
-    [this.color![0]!, this.color![1]!] = [this.color![1]!, this.color![0]!];
   }
 
   getData(): CardData {
@@ -46,8 +51,9 @@ export class Card {
       group: this.group,
       type: this.type,
       number: this.number,
-      color: this.color,
-      isRotate: this.isRotate
+      color: this.cardColor,
+      isRotate: this.isRotate,
+      isBack: this.isBack
     };
   }
 }

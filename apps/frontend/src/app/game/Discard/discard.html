@@ -1,5 +1,9 @@
 <div class="discard-container">
-  @if(discard().length > 0) {
-    <app-card [card]="discard().at(-1)!"></app-card>
+  @for(discard of discard(); track discard.id) {
+    <div class="card-m"
+      [attr.data-flip-id]="'card-' + discard.id"
+    >
+      <app-card [card]="discard"></app-card>
+    </div>
   }
 </div>

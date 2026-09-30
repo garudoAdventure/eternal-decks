@@ -13,14 +13,12 @@ import { StageArea } from './stage-area/stage-area';
 import { HeartArea } from './heart-area/heart-area';
 import { GameBoardStateService } from './gameBoardState.service';
 import { GameActionStateService } from './gameActionState.service';
-import { CardAnimationOverlay } from './animation-overlay/card-animation-overlay/card-animation-overlay';
 
 @Component({
   selector: 'app-game',
   imports: [
     CommonModule, MatButtonModule,
     ReviveArea, Field, River, Discard, PlayerArea, JewelArea, StageArea, HeartArea,
-    CardAnimationOverlay
   ],
   templateUrl: './game.html',
   styleUrl: './game.scss',

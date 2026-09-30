@@ -16,9 +16,10 @@
       width: 660px;
 
       .field-card {
+        display: inline-flex;
         width: 660px;
 
-        app-card {
+        .card-m {
           display: inline-block;
         }
 
@@ -51,8 +52,8 @@
       width: 96px;
     }
 
-    app-card {
-      margin-right: 3px;
+    .card-m {
+      margin-right: 5px;
     }
   }
 }

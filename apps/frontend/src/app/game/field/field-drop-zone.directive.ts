@@ -1,16 +1,15 @@
 import { Directive, ElementRef, Input, OnDestroy, OnInit, inject } from '@angular/core';
-import { BoardRefRegistryService } from './board-ref-registry.service';
-import { BoardRef } from './board-ref.interface';
+import { FieldDropZoneService, DropZoneKey } from './field-drop-zone.service';
 
 @Directive({
-  selector: '[appBoardRef]',
+  selector: '[appFieldDropZone]',
   standalone: true,
 })
-export class BoardRefDirective implements OnInit, OnDestroy {
-  @Input('appBoardRef') key!: BoardRef;
+export class FieldDropZoneDirective implements OnInit, OnDestroy {
+ @Input('appFieldDropZone') key!: DropZoneKey;
 
   private el = inject(ElementRef<HTMLElement>);
-  private registry = inject(BoardRefRegistryService);
+  private registry = inject(FieldDropZoneService);
 
   ngOnInit() {
     this.registry.register(this.key, this.el.nativeElement);

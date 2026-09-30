@@ -1,10 +1,16 @@
-.hint-card {
-  display: inline-block;
+.card-m {
   width: 90px;
   height: 130px;
-  background-color: forestgreen;
-  opacity: 0.5;
-  cursor: pointer;
+}
+
+.card-l {
+  width: 108px;
+  height: 156px;
+}
+
+.card-xl {
+  width: 200px;
+  height: 285px;
 }
 
 .clickable {
