@@ -1,0 +1,71 @@
+.stage-clear-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  animation: fadeIn 0.6s ease-out;
+}
+
+// 發光範圍擴散的光暈,從中心往外散開
+.stage-clear-glow {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 215, 0, 0.6) 0%, rgba(255, 215, 0, 0) 70%);
+  animation: glowExpand 2s ease-out forwards;
+}
+
+.stage-clear-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  animation: titlePop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s backwards; // 彈跳進場
+}
+
+.stage-clear-title {
+  font-size: 64px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  margin: 0;
+  // background: linear-gradient(135deg, #ffd700, #ffb347); // 金色漸層文字
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: #ffd700;
+  text-shadow: 0 0 30px rgba(255, 215, 0, 0.6); // 文字本身也帶一點發光感
+  filter: drop-shadow(0 4px 12px rgba(255, 215, 0, 0.4));
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes glowExpand {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  40% {
+    opacity: 1;
+  }
+  100% {
+    transform: scale(8); // 從小圓點擴散成覆蓋大半畫面的光暈
+    opacity: 0;
+  }
+}
+
+@keyframes titlePop {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

@@ -12,8 +12,9 @@ export class SelectEternalState extends PlayerState {
   override selectEternal(eternalIdx: number): void {
     const game = this.game;
 
-    game.genJewels[this.jewelIdx] = true;
+    game.getJewel(this.jewelIdx);
     game.eternals[eternalIdx]!.isCurse = false;
+    game.eternals[eternalIdx].useJewel = this.jewelIdx;
     
     if (
       game.eternals.length >= 3 &&
@@ -21,7 +22,7 @@ export class SelectEternalState extends PlayerState {
       !game.eternals[1]!.isCurse &&
       !game.eternals[2]!.isCurse
     ) {
-      game.getStar[0] = true;
+      game.getStar(0);
     }
     if (
       game.eternals.length >= 6 &&
@@ -29,11 +30,12 @@ export class SelectEternalState extends PlayerState {
       !game.eternals[4]!.isCurse &&
       !game.eternals[5]!.isCurse
     ) {
-      game.getStar[1] = true;
+      game.getStar(1);
     }
 
     this.player.turnEnd();
     game.emitGameData();
+    game.emitAvailableMove();
   }
 
   override getAvailableMove(): StateData {

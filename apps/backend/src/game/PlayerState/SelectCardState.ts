@@ -14,8 +14,10 @@ export class SelectCardState extends PlayerState {
   override selectCard(cardIdx: number): void {
     let card: Card = this.player.playCard(cardIdx);
     this.game.players.find((p: Player) => p.id == this.playerId)!.hand.push(card);
+    this.game.movedItemId.push('card-' + card.id);
     this.player.turnEnd();
     this.game.emitGameData();
+    this.game.emitAvailableMove();
   }
 
   override getAvailableMove(): StateData {

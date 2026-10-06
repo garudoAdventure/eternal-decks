@@ -1,15 +1,17 @@
 import { EventEmitter } from 'events';
-import { GameBoard, PlayerData } from '@shared/types'
+import { GameBoard, GameOverReason, PlayerData } from '@shared/types'
 import { Field } from './Field';
 import { River } from './River';
 import { Player } from './Player';
 import { Card } from './Card';
 import { CampBonus, HeartBonus, StarBonus } from './Bonus';
-import { Cave, Forest, GrassLand, Lake, Mountain, RiverSide } from './Rule';
+import { Camp, Cave, Forest, GrassLand, Lake, Mountain, RiverSide } from './Rule';
 import { Eternal, Ghost, King, Kraken, Medusa, Mermaid, Minotaur, Phoenix, Skeleton, Witch } from './Eternal';
 import { createInitDeck } from '../Card/cards.db';
 import { IdleState } from '../PlayerState/PlayerState';
 import { MainState } from '../PlayerState/MainState';
+import { GameOverState } from '../PlayerState/GameOverState';
+import { StageClearState } from '../PlayerState/StageClearState';
 
 export class Game extends EventEmitter {
   id: string;
@@ -19,12 +21,18 @@ export class Game extends EventEmitter {
   fields: Field[] = [];
   river: River = new River(this);
   eternals: Eternal[] = [];
-  genJewels: boolean[] = new Array(6).fill(false);
-  usedHeart: boolean[] = new Array(3).fill(false);
-  getStar: boolean[] = new Array(6).fill(false);
+  private jewels: boolean[] = new Array(6).fill(false);
+  private hearts: boolean[] = new Array(3).fill(false);
+  private stars: boolean[] = new Array(6).fill(false);
   starCard: Card[] = [];
   discard: Card[] = [];
-  getCampBonus: boolean = false;
+  campBonusCard: Card | null = new Camp().card;
+
+  movedItemId: string[] = [];
+
+  get Jewels() { return this.jewels; }
+  get Hearts() { return this.hearts; }
+  get Stars() { return this.stars; }
 
   constructor(id: string) {
     super();
@@ -99,16 +107,29 @@ export class Game extends EventEmitter {
     this.players.find((p: Player) => p.id == id)!.state.rotateCard(cardIdx);
   }
 
-  gameOver() {
-    this.players.forEach((player: Player) => {
-      player.changeState(new IdleState());
-    });
-    this.emit('gameOver');
-    // for (let player of this.players) {
-    //   this.playerSocket.get(player.id)!.emit('updateGameData', this.getGameData(player.id));
-    //   this.playerSocket.get(player.id)!.emit('getAvailableMove', player.state.getAvailableMove());
-    //   this.playerSocket.get(player.id)!.emit('gameOver');
-    // }
+  getStar(starIdx: number) {
+    this.stars[starIdx] = true;
+    this.movedItemId.push('star-' + starIdx);
+    
+    if (this.stars.filter((star) => star).length >= 4) {
+      this.stageClear();
+    }
+  }
+
+  getJewel(jewelIdx: number) {
+    this.jewels[jewelIdx] = true;
+  }
+
+  useHeart(heartIdx: number) {
+    this.hearts[heartIdx] = true;
+  }
+
+  resetHeart() {
+    this.hearts = [false, false, false];
+  }
+
+  addPlayer(player: Player) {
+    this.players.push(player);
   }
 
   changeToNextPlayer() {
@@ -118,61 +139,81 @@ export class Game extends EventEmitter {
     this.players[this.currentPlayerIdx]!.changeState(new MainState());
   }
 
-  addPlayer(player: Player) {
-    this.players.push(player);
-    // this.playerSocket.set(player.id, socket);
-  }
-
   initPlayers() {
-    for(let player of this.players) {
+    this.currentPlayerIdx = 0;
+
+    this.players.forEach(player => {
       player.deck.addCards(createInitDeck(player.color));
       player.deck.shuffle();
       player.hand = player.deck.draw(3);
-    }
+      player.changeState(new IdleState());
+    });
+
     this.players.sort((a: any, b: any) => a.color - b.color);
     this.players[this.currentPlayerIdx]!.changeState(new MainState());
   }
 
+  stageClear() {
+    this.players.forEach((player: Player) => {
+      player.changeState(new StageClearState());
+    });
+    this.emit('stageClear');
+  }
+
+  gameOver(reason: GameOverReason) {
+    this.players.forEach((player: Player) => {
+      player.changeState(new GameOverState());
+    });
+    this.emit('gameOver', { reason });
+  }
+
   getPlayersData(id: string, hidePlayerHand: boolean = true) {
+    // 傳給前端的玩家順序讓當前玩家永遠排在第一個
     let playersData: PlayerData[] = [];
-    const playerArrForOrder: PlayerData[] = [];
-    let flag: boolean = false;
-    for (let player of this.players) {
-      flag = flag || id == player.id;
-      if (!flag) {
+    const orderedPlayerArr: PlayerData[] = [];
+    let isFindCurrentPlayer: boolean = false;
+    this.players.forEach(player => {
+      isFindCurrentPlayer = isFindCurrentPlayer || id === player.id;
+      if (!isFindCurrentPlayer) {
         if (!hidePlayerHand) {
-          playerArrForOrder.push(player.getRawData());
+          orderedPlayerArr.push(player.getRawData());
         } else {
-          playerArrForOrder.push(player.getHiddenData());
+          orderedPlayerArr.push(player.getHiddenData());
         }
       } else {
-        if (id == player.id || !hidePlayerHand) {
+        if (id === player.id || !hidePlayerHand) {
           playersData.push(player.getRawData());
         } else {
           playersData.push(player.getHiddenData());
         }
       }
-    }
-    playersData = [...playersData, ...playerArrForOrder];
+    });
+    
+    playersData = [...playersData, ...orderedPlayerArr];
     return playersData;
   }
 
   getGameData(id: string, hidePlayerHand: boolean = true): GameBoard {
     return {
-      getStar: this.getStar,
-      usedHeart: this.usedHeart,
-      genJewel: this.genJewels,
+      getStar: this.stars,
+      hearts: this.hearts,
+      genJewel: this.jewels,
       players: this.getPlayersData(id, hidePlayerHand),
       fields: this.fields.map((field) => field.getData()),
       river: this.river.getData(),
       eternals: this.eternals.map((eternal) => eternal.getData()),
       discard: this.discard.map((card) => card.getData()),
       starCard: this.starCard.map((card) => card.getData()),
-      getCampBonus: this.getCampBonus
+      campBonus: this.campBonusCard?.getData() ?? null,
+      movedItemId: this.movedItemId
     };
   }
 
   emitGameData() {
-    this.emit('stateChanged');
+    this.emit('updateGameData');
+  }
+
+  emitAvailableMove() {
+    this.emit('getAvailableMove');
   }
 }

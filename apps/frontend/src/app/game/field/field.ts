@@ -7,11 +7,6 @@ import { GameBoardStateService } from '../gameBoardState.service';
 import { GameActionStateService } from '../gameActionState.service';
 import { FieldDropZoneDirective } from './field-drop-zone.directive';
 import { FieldDropZoneService } from './field-drop-zone.service';
-import { AnimationService } from '../animation.service';
-import gsap from 'gsap';
-import { Flip } from 'gsap/Flip';
-
-gsap.registerPlugin(Flip);
 
 @Component({
   selector: 'app-field',
@@ -25,19 +20,12 @@ export class Field {
   private gameActionState = inject(GameActionStateService);
   private dropZone = inject(FieldDropZoneService);
 
-  private animationService = inject(AnimationService);
-
   fields = this.gameBoardState.fields;
+  campBonus = this.gameBoardState.campBonus;
   validField = this.gameActionState.validField;
   validFieldEternal = this.gameActionState.validFieldEternal;
                   
   constructor() {
-    effect(() => {
-      this.fields();
-      requestAnimationFrame(() => {
-        this.animationService.playCardAnim();
-      });
-    });
   }
 
   isValidTarget(fieldIdx: number): boolean {
@@ -57,21 +45,26 @@ export class Field {
   }
 
   onSelectFieldEternal(index: number, fieldIdx: number, cardId: string) {
-    const state = Flip.getState(`[data-flip-id="card-${cardId}"] .card`);
-    Flip.from(state, {
-      rotateY: 180,
-      duration: 0.5,
-      clearProps: false,
-      onComplete:() => {
-        this.animationService.addState(cardId);
-        this.fields()[fieldIdx].cards.forEach(card => {
-          this.animationService.addState(card.id);
-        });
-        this.socketService.emit(GameEvent.SELECT_FIELD_ETERNAL, {
-          roomId: sessionStorage.getItem('roomId'),
-          eternalIdx: index,
-        });
-      }
+    this.socketService.emit(GameEvent.SELECT_FIELD_ETERNAL, {
+      roomId: sessionStorage.getItem('roomId'),
+      eternalIdx: index,
     });
+
+    // const state = Flip.getState(`[data-flip-id="card-${cardId}"] .card`);
+    // Flip.from(state, {
+    //   rotateY: 180,
+    //   duration: 0.5,
+    //   clearProps: false,
+    //   onComplete:() => {
+    //     this.animationService.addState(cardId);
+    //     this.fields()[fieldIdx].cards.forEach(card => {
+    //       this.animationService.addState(card.id);
+    //     });
+    //     this.socketService.emit(GameEvent.SELECT_FIELD_ETERNAL, {
+    //       roomId: sessionStorage.getItem('roomId'),
+    //       eternalIdx: index,
+    //     });
+    //   }
+    // });
   }
 }

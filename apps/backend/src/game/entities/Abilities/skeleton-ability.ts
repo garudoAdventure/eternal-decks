@@ -9,7 +9,7 @@ export class SkeletonAbility extends AbilityCard {
   }
 
   override play(player: Player): void {
-    if (player.game.usedHeart.filter((isUsed) => isUsed).length == 0) {
+    if (player.game.Hearts.filter((isUsed) => isUsed).length == 0) {
       player.turnEnd();
     } else {
       player.changeState(new SelectHeartState());

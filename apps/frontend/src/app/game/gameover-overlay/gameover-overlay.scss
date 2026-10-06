@@ -1,0 +1,41 @@
+.game-over-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.6s ease-out;
+}
+
+.game-over-content {
+  text-align: center;
+  color: white;
+  animation: fadeIn 0.8s ease-out 0.2s backwards;
+}
+
+.game-over-icon {
+  width: 160px;
+  height: 160px;
+  margin-bottom: 24px; // icon 跟 title 之間
+  color: #e85d5d;
+}
+
+.game-over-title {
+  font-size: 72px;
+  font-weight: 700;
+  margin: 0 0 30px;
+  letter-spacing: 3px;
+}
+
+.game-over-reason {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 20px;
+  margin: 0;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

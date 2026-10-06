@@ -45,14 +45,20 @@ export class Player {
   changeState(state: PlayerState) {
     this.state = state;
     this.state.player = this;
+    this.state.init();
   }
 
   getRawData(): PlayerData {
+    let handData = [];
+    this.hand.forEach(card => {
+      handData.push(card.getData());
+    });
+
     return {
       id: this.id,
       name: this.name,
       color: this.color,
-      hand: this.hand,
+      hand: handData,
       deckNum: this.deck.cardNum
     };
   }

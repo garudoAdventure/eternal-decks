@@ -18,7 +18,12 @@
       <app-discard></app-discard>
       <div class="star-container">
         @for(star of stars(); track $index) {
-          <div class="star-token"></div>
+          @if (!star) {
+            <div class="star-token"
+              [id]="'star-' + $index"
+              [attr.data-flip-id]="'star-' + $index"
+            ></div>
+          }
         }
       </div>
     </div>
@@ -32,3 +37,5 @@
     </div> -->
   </div>
 </div>
+<app-gameover-overlay></app-gameover-overlay>
+<app-stage-clear-overlay></app-stage-clear-overlay>

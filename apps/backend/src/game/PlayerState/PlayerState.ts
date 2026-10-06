@@ -18,9 +18,9 @@ export class PlayerState {
     validFieldCard: false
   };
 
-  get game(): Game {
-    return this.player.game;
-  }
+  get game(): Game { return this.player.game; }
+
+  init() {}
 
   selectCard(cardIdx: number) {}
   dragCard(cardIdx: number) {}
@@ -32,8 +32,8 @@ export class PlayerState {
   selectEternal(eternalIdx: number) {}
   selectFieldEternal(eternalIdx: number) {}
   selectPlayer(playerId: string) {}
-  useAbilityCard(cardIdx: number) {}
   confirmAction() {}
+  useAbilityCard(cardIdx: number) {}
   rotateCard(cardIdx: number) {
     this.player.hand[cardIdx]!.rotate();
     this.game.emitGameData();

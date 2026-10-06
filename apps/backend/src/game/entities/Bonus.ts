@@ -7,20 +7,23 @@ export interface Bonus {
 
 export class CampBonus implements Bonus {
   get(player: Player) {
-    player.hand.push(new Camp().card);
+    const campCard = player.game.campBonusCard;
+    player.game.campBonusCard = null;
+    player.hand.push(campCard);
+    player.game.movedItemId.push('card-' + campCard.id);
   }
 }
 
 export class HeartBonus implements Bonus {
   get(player: Player) {
-    player.game.usedHeart = [false, false, false];
+    player.game.resetHeart();
     player.turnEnd();
   }
 }
 
 export class StarBonus implements Bonus {
   get(player: Player) {
-    player.game.getStar[5] = true;
+    player.game.getStar(5);
     player.turnEnd();
   }
 }

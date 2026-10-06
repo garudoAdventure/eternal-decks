@@ -35,6 +35,7 @@ export class GameGateway implements OnGatewayDisconnect {
       player.socketId = client.id;
     }
     game.emitGameData();
+    game.emitAvailableMove();
   }
 
   @SubscribeMessage(GameEvent.SELECT_CARD)

@@ -6,9 +6,9 @@ export class Card {
   group: CardGroup = CardGroup.NONE;
   type: CardType = CardType.NONE;
   number: number = 0;
-  color: Color[] = [Color.NONE, Color.NONE];
   isRotate: boolean = false;
   isBack: boolean = false;
+  private color: Color[] = [Color.NONE, Color.NONE];
 
   constructor(
     subID: number,
@@ -23,7 +23,7 @@ export class Card {
     if (number) { this.number = number; }
     if (color) { this.color = color; }
 
-    this.id = `${ group }-${ subID }`;
+    this.id = `${ group }-${ type }-${ subID }`;
   }
 
   get isRare(): boolean {

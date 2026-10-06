@@ -1,9 +1,12 @@
+@use '../global.scss';
+
 .star-card-container {
   position: absolute;
   top: 206px;
   left: 292px;
 
-  .card {
+  .card-m {
+    display: inline-block;
     margin-right: 8px;
     &:nth-child(2) { margin-right: 41px; }
   }
@@ -16,14 +19,16 @@
   width: 64px;
 
   .star-token {
+    position: absolute;
     width: 32px;
     height: 40px;
     background-image: url("/asset/star.png");
     background-repeat: no-repeat;
     background-size: cover;
 
-    &:nth-child(1) { margin-left: 15px; }
-    &:nth-child(2), &:nth-child(3) { top: -26px; }
-    &:nth-child(4) { top: -55px; left: 15px; }
+    &:nth-child(1) { left: 15px; }
+    &:nth-child(2) { top: 18px; }
+    &:nth-child(3) { top: 18px; left: 31px; }
+    &:nth-child(4) { top: 37px; left: 15px; }
   }
 }

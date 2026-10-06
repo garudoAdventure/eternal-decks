@@ -63,7 +63,7 @@
       position: relative;
       display: inline-block;
       margin-right: 5px;
-      animation: cardDrawIn 0.3s ease-out;
+      // animation: cardDrawIn 0.3s ease-out;
 
       .rotate-btn, .use-btn {
         display: none;
@@ -99,7 +99,7 @@
   cursor: grab;
 
   &:not(.cdk-drag-dragging) {
-    transition: transform 0.2s ease;
+    // transition: transform 0.2s ease;
   }
 
   &.cdk-drag-dragging {

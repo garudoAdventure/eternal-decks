@@ -4,4 +4,5 @@ export interface EternalData {
   card: CardData;
   isRelease: boolean;
   isCurse: boolean;
+  useJewel: number;
 }

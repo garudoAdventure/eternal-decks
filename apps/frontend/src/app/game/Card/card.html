@@ -1,6 +1,8 @@
-<div class="card" [class.flipped]="card.isBack">
+<div class="card" 
+  [class.flipped]="card.isBack"
+  [class.isRotate]="card.isRotate"
+>
   <div class="card-face card-front"
-    [class.isRotate]="card.isRotate"
     [style.background-image]="getCardImg(card)"
   ></div>
   <div class="card-face card-back"

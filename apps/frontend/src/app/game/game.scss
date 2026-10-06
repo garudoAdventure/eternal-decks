@@ -49,7 +49,7 @@
 
     app-river {
       position: absolute;
-      top: 830px;
+      top: 829px;
       left: 62px;
     }
 
@@ -75,12 +75,13 @@
       left: 0px;
 
       .star-token {
-        &:nth-child(1) { top: 144px; left: 329px; }
-        &:nth-child(2) { top: 144px; left: 608px; }
-        &:nth-child(3) { top: 94px;  left: 826px; }
-        &:nth-child(4) { top: 284px; left: 149px; }
-        &:nth-child(5) { top: 251px; left: 423px; }
-        &:nth-child(6) { top: 720px; left: 720px; }
+        position: absolute;
+        &#star-0 { top: 144px; left: 329px; }
+        &#star-1 { top: 144px; left: 641px; }
+        &#star-2 { top: 94px;  left: 890px; }
+        &#star-3 { top: 284px; left: 245px; }
+        &#star-4 { top: 251px; left: 550px; }
+        &#star-5 { top: 720px; left: 880px; }
       }
     }
   }

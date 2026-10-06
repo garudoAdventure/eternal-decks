@@ -24,7 +24,8 @@ export enum CardType {
   RARE,
   ABILITY,
   RULE,
-  ETERNAL
+  ETERNAL,
+  GAME_OVER
 }
 
 export enum CardSize {

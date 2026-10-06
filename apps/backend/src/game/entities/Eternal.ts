@@ -8,6 +8,8 @@ export class Eternal {
   deck: Deck = new Deck([]);
   isRelease: boolean = false;
   isCurse: boolean = true;
+  useJewel: number = -1;
+
   isValid(card : Card): boolean { return true; }
   release() {
     this.isRelease = true;
@@ -16,9 +18,10 @@ export class Eternal {
   }
   getData(): EternalData {
     return {
-      card: this.card,
+      card: this.card.getData(),
       isRelease: this.isRelease,
-      isCurse: this.isCurse
+      isCurse: this.isCurse,
+      useJewel: this.useJewel
     };
   }
 }
@@ -98,7 +101,7 @@ export class Vampire extends Eternal {
 
   isValid(card: Card): boolean {
     return card.type == CardType.RARE ||
-      card.color[0] != Color.PURPLE && card.color[1] != Color.PURPLE;
+      card.cardColor[0] != Color.PURPLE && card.cardColor[1] != Color.PURPLE;
   }
 }
 
@@ -108,7 +111,7 @@ export class Medusa extends Eternal {
 
   isValid(card: Card): boolean {
     return card.type == CardType.RARE ||
-      card.color[0] != Color.RED && card.color[1] != Color.RED;
+      card.cardColor[0] != Color.RED && card.cardColor[1] != Color.RED;
   }
 }
 
@@ -118,7 +121,7 @@ export class Minotaur extends Eternal {
 
   isValid(card: Card): boolean {
     return card.type == CardType.RARE ||
-      card.color[0] != Color.BLUE && card.color[1] != Color.BLUE;
+      card.cardColor[0] != Color.BLUE && card.cardColor[1] != Color.BLUE;
   }
 }
 
@@ -128,7 +131,7 @@ export class Kraken extends Eternal {
 
   isValid(card: Card): boolean {
     return card.type == CardType.RARE ||
-      card.color[0] != Color.GREEN && card.color[1] != Color.GREEN;
+      card.cardColor[0] != Color.GREEN && card.cardColor[1] != Color.GREEN;
   }
 }
 
@@ -138,6 +141,6 @@ export class Mummy extends Eternal {
 
   isValid(card: Card): boolean {
     return card.type == CardType.RARE ||
-      card.color[0] != Color.YELLOW && card.color[1] != Color.YELLOW;
+      card.cardColor[0] != Color.YELLOW && card.cardColor[1] != Color.YELLOW;
   }
 }

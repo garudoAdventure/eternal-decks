@@ -13,11 +13,14 @@ export class SelectFieldEternalState extends PlayerState {
     let eternal = this.game.fields[this.fieledIdx]!.releaseEternal(eternalIdx);
     eternal.deck.shuffle();
     this.player.deck.addDeck(eternal.deck);
+    
+    this.game.movedItemId.push('card-' + eternal.card.id);
 
     this.game.fields[this.fieledIdx]!.emptyField();
 
     this.player.turnEnd();
     this.game.emitGameData();
+    this.game.emitAvailableMove();
   }
 
   override getAvailableMove(): StateData {

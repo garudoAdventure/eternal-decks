@@ -35,6 +35,9 @@ export class Card {
   getCardImg(card: CardData): string {
     let imgUrl: string = '';
     switch(card.type) {
+      case CardType.GAME_OVER:
+        imgUrl = './asset/card/gameOver/0.jpg';
+        break;
       case CardType.RARE:
         imgUrl = './asset/card/rare/0.jpg';
         break;
@@ -54,6 +57,15 @@ export class Card {
   getCardBackImg(card: CardData): string {
     let imgUrl: string = '';
     switch(card.type) {
+      case CardType.GAME_OVER:
+        imgUrl = './asset/card/gameOver/back.jpg';
+        break;
+      case CardType.RARE:
+        imgUrl = './asset/card/rare/0.jpg';
+        break;
+      case CardType.RULE:
+        imgUrl = './asset/card/rule/back.jpg';
+        break;
       case CardType.ETERNAL:
         imgUrl = './asset/card/' + this.getGroupStr(card.group) + '/back.jpg';
         break;

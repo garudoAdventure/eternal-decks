@@ -6,6 +6,7 @@
   >
     @for(card of river().cards; track $index) {
       <div class="card-m"
+        [attr.data-flip-id]="'card-' + card.id"
         [class.clickable]="validRiverCard()"
         (click)="onSelectCard($index)"
       >
@@ -15,10 +16,14 @@
   </div>
   <div class="river-rare-card">
     @for(card of river().rareCards; track $index) {
-      <div class="card-m">
+      <div class="card-m"
+        [attr.data-flip-id]="'card-' + card.id"
+      >
         <app-card [card]="card"></app-card>
       </div>
     }
   </div>
-  <div class="card gameOver"></div>
+  <div class="card-m">
+    <app-card [card]="river().gameOverCard"></app-card>
+  </div>
 </div>

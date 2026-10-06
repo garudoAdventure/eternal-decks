@@ -1,6 +1,6 @@
 <div id="player-container">
   @for(player of players(); track $index; let playerIdx = $index) {
-    <mat-card class="player" #player>
+    <mat-card class="player">
       <mat-card-header>
         <div class="player-token">
           <div class="token-img" [ngClass]="getColorStr(player.color)" (click)="onSelectPlayer(player.id)"></div>
@@ -12,19 +12,13 @@
           <img class="deck-icon" src="/asset/deck_icon.png">
           <span class="deck-num">{{ player.deckNum }}</span>
         </div>
-        @if (playerIdx != 0) {
-          <div class="hand-card">
-            @for (card of player.hand; track card.id; let cardIdx = $index) {
-              <div class="card-container card-m"
-                [attr.data-flip-id]="'card-' + card.id"
-              >
+        <div class="hand-card">
+          @for (card of player.hand; track card.id; let cardIdx = $index) {
+            @if (playerIdx !== 0) {
+              <div class="card-container card-m" [attr.data-flip-id]="'card-' + card.id">
                 <app-card [card]="card"></app-card>
               </div>
-            }
-          </div>
-        } @else {
-          <div class="hand-card">
-            @for (card of player.hand; track card.id; let cardIdx = $index) {
+            } @else {
               <div class="card-container card-l"
                 [class.selected]="selectedCard()[cardIdx]"
                 [attr.data-flip-id]="'card-' + card.id"
@@ -51,8 +45,8 @@
                 }
               </div>
             }
-          </div>
-        }
+          }
+        </div>
       </mat-card-content>
     </mat-card>
   }

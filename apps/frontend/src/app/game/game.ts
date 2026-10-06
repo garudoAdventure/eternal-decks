@@ -13,12 +13,15 @@ import { StageArea } from './stage-area/stage-area';
 import { HeartArea } from './heart-area/heart-area';
 import { GameBoardStateService } from './gameBoardState.service';
 import { GameActionStateService } from './gameActionState.service';
+import { GameOverOverlay } from './gameover-overlay/gameover-overlay';
+import { StageClearOverlay } from './stage-clear-overlay.ts/stage-clear-overlay';
 
 @Component({
   selector: 'app-game',
   imports: [
     CommonModule, MatButtonModule,
     ReviveArea, Field, River, Discard, PlayerArea, JewelArea, StageArea, HeartArea,
+    GameOverOverlay, StageClearOverlay
   ],
   templateUrl: './game.html',
   styleUrl: './game.scss',

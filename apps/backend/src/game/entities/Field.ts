@@ -4,8 +4,8 @@ import { Eternal } from "./Eternal";
 import { Card } from "./Card";
 import { Bonus } from "./Bonus";
 import { Player } from "./Player";
-import { SelectFieldEternalState } from "../PlayerState/SelectFieldEternalState";
 import { Game } from "./Game";
+import { SelectFieldEternalState } from "../PlayerState/SelectFieldEternalState";
 
 export interface CardVal {
   number: number;
@@ -41,13 +41,13 @@ export class Field {
 
     for (let i = 0; i < this.rule.length; i++) {
       const j = Math.floor(Math.random() * (i + 1));
-      [this.rule[i], this.rule[j]] = [this.rule[j]!, this.rule[i]!];
+      [this.rule[i], this.rule[j]] = [this.rule[j], this.rule[i]];
     }
   }
 
   setCard(card: Card) {
     this.cards.push(card);
-    this.currentCardVal = this.rule[0]!.caclCurrentVal(this.currentCardVal, card);
+    this.currentCardVal = this.rule[0].caclCurrentVal(this.currentCardVal, card);
   }
 
   reCaclCurrentVal() {
@@ -57,16 +57,16 @@ export class Field {
       isRare: true
     };
     for (let card of this.cards) {
-      this.currentCardVal = this.rule[0]!.caclCurrentVal(this.currentCardVal, card);
+      this.currentCardVal = this.rule[0].caclCurrentVal(this.currentCardVal, card);
     }
   }
 
   handleFieldComplete(player: Player, fieldIdx: number) {
-    if (this.cards.length + this.eternals.length != 7) {
+    if (this.cards.length + this.eternals.length !== 7) {
       player.turnEnd();
       return;
     }
-    if (this.eternals.length != 0) {
+    if (this.eternals.length !== 0) {
       player.changeState(new SelectFieldEternalState(fieldIdx));
     } else {
       this.bonus.get(player);
@@ -80,33 +80,33 @@ export class Field {
     if (!this.isFixedRule) {
       let card: Card = this.rule.shift()!.card;
       this.game.discard.push(card);
+      this.game.movedItemId.push('card-' + card.id);
     }
-    this.game.discard.push(...this.cards);
+    this.cards.forEach(card => {
+      this.game.discard.push(card);
+      this.game.movedItemId.push('card-' + card.id);
+    });
+    
     this.cards = [];
   }
 
   checkRule(card: Card): boolean {
-    let baseRule: boolean = this.cards.length == 0 || card.isRare ||
-      this.cards.at(-1)!.isRare ||
-      this.cards.at(-1)!.number != card.number &&
-      this.cards.at(-1)!.color![1] != card.color![0];
+    let baseRule: boolean = this.cards.length === 0 || card.isRare ||
+      this.cards.at(-1).isRare ||
+      this.cards.at(-1).number != card.number &&
+      this.cards.at(-1).cardColor![1] != card.cardColor[0];
 
-    return baseRule && (this.isTransToCamp || this.rule[0]!.checkValid(this.cards.length, this.currentCardVal, card));
+    return baseRule && (this.isTransToCamp || this.rule[0].checkValid(this.cards.length, this.currentCardVal, card));
   }
 
   releaseEternal(eternalIdx: number): Eternal {
-    let eternal: Eternal = this.eternals[eternalIdx]!;
+    let eternal: Eternal = this.eternals[eternalIdx];
     eternal.release();
     this.eternals.splice(eternalIdx, 1);
     this.game.eternals.push(eternal);
     if (this.game.eternals.length == 9) {
-      this.game.getStar[2] = true;
+      this.game.getStar(2);
     }
-
-    for (let card of this.cards) {
-      this.game.discard.push(card);
-    }
-    this.cards = [];
 
     this.currentCardVal = {
       number: 0,
@@ -122,9 +122,13 @@ export class Field {
     for (let eternal of this.eternals) {
       eternalsData.push(eternal.getData());
     }
+    let cardsData = [];
+    this.cards.forEach(card => {
+      cardsData.push(card.getData());
+    });
     return {
-      rule: this.rule[0]!.card,
-      cards: this.cards,
+      rule: this.rule[0]!.card.getData(),
+      cards: cardsData,
       eternals: eternalsData
     };
   }

@@ -6,7 +6,7 @@ export abstract class StarCardAbility extends AbilityCard {
   override play(player: Player): void {
     player.game.starCard.push(this);
     if (player.game.starCard.length == 3) {
-      player.game.getStar[4] = true;
+      player.game.getStar(4);
     }
     player.turnEnd();
   }

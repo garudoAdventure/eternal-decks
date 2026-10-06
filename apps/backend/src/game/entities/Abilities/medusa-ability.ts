@@ -13,6 +13,7 @@ export class MedusaAbility extends AbilityCard {
       if (card.type == CardType.RARE) {
         player.game.river.rareCards.push(card);
         player.game.discard.splice(idx, 1);
+        player.game.movedItemId.push('card-' + card.id);
         break;
       }
       idx++;

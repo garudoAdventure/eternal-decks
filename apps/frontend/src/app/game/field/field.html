@@ -2,7 +2,9 @@
   @for(field of fields(); track $index; let fieldIdx = $index) {
     <div class="field">
       <div class="field-rule">
-        <div class="card-m">
+        <div class="card-m"
+          [attr.data-flip-id]="'card-' + field.rule.id"
+        >
           <app-card [card]="field.rule"></app-card>
         </div>
       </div>
@@ -20,9 +22,6 @@
               <app-card [card]="card"></app-card>
             </div>
           }
-          @if (field.cards.length < 7 - field.eternals.length) {
-            <div class="empty-slot-card"></div>
-          }
         </div>
         <div class="field-eternal">
           @for(eternal of field.eternals; track eternal.card.id) {
@@ -36,7 +35,15 @@
           }
         </div>
       </div>
-      <div class="field-bonus"></div>
+      <div class="field-bonus">
+        @if (fieldIdx == 0 && campBonus() !== null) {
+          <div class="card-m"
+            [attr.data-flip-id]="'card-' + campBonus()!.id"
+          >
+            <app-card [card]="campBonus()!"></app-card>
+          </div>
+        }
+      </div>
     </div>
   }
 </div>

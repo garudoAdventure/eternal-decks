@@ -10,4 +10,5 @@ export interface FieldData {
 export interface RiverData {
   cards: CardData[];
 	rareCards: CardData[];
+  gameOverCard: CardData;
 }

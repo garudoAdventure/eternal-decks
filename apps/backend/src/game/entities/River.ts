@@ -1,4 +1,4 @@
-import { CardGroup, CardType, RiverData } from "@shared/types";
+import { CardGroup, CardType, GameOverReason, RiverData } from "@shared/types";
 import { Player } from "./Player";
 import { Card } from "./Card";
 import { Game } from "./Game";
@@ -9,29 +9,52 @@ export class River {
   ){}
 
   cards: Card[] = [];
+  gameOverCard: Card = new Card(0, CardGroup.NONE, CardType.GAME_OVER);
   rareCards: Card[] = [
     new Card(0, CardGroup.NONE, CardType.RARE),
-    new Card(0, CardGroup.NONE, CardType.RARE),
-    new Card(0, CardGroup.NONE, CardType.RARE),
+    new Card(1, CardGroup.NONE, CardType.RARE),
+    new Card(2, CardGroup.NONE, CardType.RARE),
   ];
 
   setCard(player: Player, cards: Card[]) {
-    this.cards.push(...cards);
+    cards.forEach(card => {
+      this.cards.push(card);
+      this.game.movedItemId.push('card-' + card.id);
+    });
+    this.game.emitGameData();
+
     if (this.cards.length >= 5) {
-      if (this.rareCards.length == 0) {
-        this.game.gameOver();
+      if (this.rareCards.length === 0) {
+        this.game.gameOver(GameOverReason.RIVER_EXHAUSTED);
         return;
       }
-      player.hand.push(this.rareCards.pop()!);
-      this.game.discard.push(...this.cards);
+      const rareCard = this.rareCards.pop();
+      player.hand.push(rareCard);
+      this.game.movedItemId.push('card-' + rareCard.id);
+
+      this.cards.forEach(card => {
+        this.game.discard.push(card);
+        this.game.movedItemId.push('card-' + card.id);
+      });
       this.cards = [];
     }
   }
 
   getData(): RiverData {
+    let cardsData = [];
+    this.cards.forEach(card => {
+      cardsData.push(card.getData());
+    });
+
+    let rareCardsData = [];
+    this.rareCards.forEach(card => {
+      rareCardsData.push(card.getData());
+    })
+
     return {
-      cards: this.cards,
-      rareCards: this.rareCards
+      cards: cardsData,
+      rareCards: rareCardsData,
+      gameOverCard: this.gameOverCard.getData()
     };
   }
 }

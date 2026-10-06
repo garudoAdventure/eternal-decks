@@ -2,40 +2,49 @@ import { Injectable } from "@nestjs/common";
 import { Server } from "socket.io";
 import { Game } from "./entities/Game";
 import { Player } from "./entities/Player";
-import { PlayCardAnimationEvent, Color, RoomPlayer } from "@shared/types";
+import { Color, RoomPlayer } from "@shared/types";
 
 @Injectable()
 export class GameManagerService {
   games = new Map<string, Game>();
 
   constructor(
-  ){ }
+  ){}
 
   createGame(roomId: string, players: RoomPlayer[], server: Server): Game {
     const game = new Game(roomId);
     const color = [Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW];
-    let idx = 0;
-    for (const player of players) {
-      game.addPlayer(
-        new Player(player.playerId, player.socketId, player.name, color[idx], game)
-      );
-      idx++;
-    }
+    
+    players.forEach((player, idx) => {
+      game.addPlayer(new Player(
+        player.playerId, player.socketId, player.name, color[idx], game
+      ));
+    });
+
     game.initPlayers();
 
-    game.on('stateChanged', () => {
+    game.on('updateGameData', () => {
       this.broadcastGameData(game, server);
     });
 
-    game.on('playCardAnimation', (event: PlayCardAnimationEvent) => {
-      for (let player of game.players) {
-        const playerSocket = server.sockets.sockets.get(player.socketId);
-        playerSocket.emit('playCardAnimation', event);
-      }
-    });
+    game.on('getAvailableMove', () => {
+      this.broadcastAvailableMove(game, server);
+    })
 
-    game.on('gameOver', () => {
-      
+    game.on('stageClear', () => {
+      game.players.forEach(player => {
+        const playerSocket = server.sockets.sockets.get(player.socketId);
+        playerSocket.emit('stageClear');
+        playerSocket.emit('getAvailableMove', player.state.getAvailableMove());
+      });
+    });
+    
+    game.on('gameOver', (payload) => {
+      game.players.forEach(player => {
+        const playerSocket = server.sockets.sockets.get(player.socketId);
+        playerSocket.emit('gameOver', payload);
+        playerSocket.emit('getAvailableMove', player.state.getAvailableMove());
+      });
     });
     
     this.games.set(roomId, game);
@@ -47,10 +56,17 @@ export class GameManagerService {
   }
 
   private broadcastGameData(game: Game, server: Server) {
-    for (let player of game.players) {
+    game.players.forEach(player => {
       const playerSocket = server.sockets.sockets.get(player.socketId);
       playerSocket.emit('updateGameData', player.state.getGameData());
+    });
+    game.movedItemId = [];
+  }
+
+  private broadcastAvailableMove(game: Game, server: Server) {
+    game.players.forEach(player => {
+      const playerSocket = server.sockets.sockets.get(player.socketId);
       playerSocket.emit('getAvailableMove', player.state.getAvailableMove());
-    }
+    });
   }
 }

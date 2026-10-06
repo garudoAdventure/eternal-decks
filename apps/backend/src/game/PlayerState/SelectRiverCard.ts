@@ -9,17 +9,21 @@ export class SelectRiverCardState extends PlayerState {
     let card: Card = this.game.river.cards[cardIdx]!;
     this.player.hand.push(card);
     this.game.river.cards.splice(cardIdx, 1);
+
+    this.game.movedItemId.push('card-' + card.id);
     
     this.getCardChance--;
     if (this.getCardChance == 0 || this.game.river.cards.length == 0) {
       this.player.turnEnd();
     }
     this.game.emitGameData();
+    this.game.emitAvailableMove();
   }
 
   override confirmAction(): void {
     this.player.turnEnd();
     this.game.emitGameData();
+    this.game.emitAvailableMove();
   }
 
   override getAvailableMove(): StateData {

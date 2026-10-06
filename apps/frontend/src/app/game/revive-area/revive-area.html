@@ -8,7 +8,9 @@
         (click)="onSelectEternal($index)"
       ></app-card>
       @if (!eternal.isCurse) {
-        <div class="jewel-token"></div>
+        <div class="jewel-token"
+          [attr.data-flip-id]="'jewel-' + eternal.useJewel"
+        ></div>
       }
     </div>
   }

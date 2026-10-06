@@ -9,7 +9,7 @@ export class DisscussState extends PlayerState {
       }
     }
     this.player.turnEnd();
-    this.game.emitGameData();
+    this.game.emitAvailableMove();
   }
 
   override getGameData(): GameBoard {

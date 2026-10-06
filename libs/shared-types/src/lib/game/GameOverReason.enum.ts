@@ -1,0 +1,4 @@
+export enum GameOverReason {
+  DECK_EXHAUSTED = 'DECK_EXHAUSTED',
+  RIVER_EXHAUSTED = 'RIVER_RELEASED',
+}

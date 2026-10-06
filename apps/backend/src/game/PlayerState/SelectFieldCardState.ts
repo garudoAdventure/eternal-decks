@@ -27,6 +27,7 @@ export class SelectFieldCardState extends PlayerState {
     
     this.player.turnEnd();
     this.game.emitGameData();
+    this.game.emitAvailableMove();
   }
 
   override getAvailableMove(): StateData {

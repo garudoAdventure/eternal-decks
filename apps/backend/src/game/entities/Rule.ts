@@ -17,7 +17,7 @@ export class Camp implements Rule {
   caclCurrentVal(currentVal: CardVal, card: Card): CardVal {
     return {
       number: card.number,
-      color: card.color,
+      color: card.cardColor,
       isRare: card.type == CardType.RARE
     };
   }
@@ -33,7 +33,7 @@ export class GrassLand implements Rule {
   caclCurrentVal(currentVal: CardVal, card: Card): CardVal {
     return {
       number: card.number,
-      color: card.color,
+      color: card.cardColor,
       isRare: card.type == CardType.RARE
     };
   }
@@ -49,7 +49,7 @@ export class Mountain implements Rule {
   caclCurrentVal(currentVal: CardVal, card: Card): CardVal {
     let returnVal: CardVal = {
       number: card.number,
-      color: card.color,
+      color: card.cardColor,
       isRare: card.type == CardType.RARE
     };
     if (card.type == CardType.RARE) {
@@ -69,7 +69,7 @@ export class Cave implements Rule {
   caclCurrentVal(currentVal: CardVal, card: Card): CardVal {
     let returnVal: CardVal = {
       number: card.number,
-      color: card.color,
+      color: card.cardColor,
       isRare: card.type == CardType.RARE
     };
     if (card.type == CardType.RARE) {
@@ -93,7 +93,7 @@ export class Forest implements Rule {
   caclCurrentVal(currentVal: CardVal, card: Card): CardVal {
     let returnVal: CardVal = {
       number: card.number,
-      color: card.color,
+      color: card.cardColor,
       isRare: card.type == CardType.RARE
     };
     return returnVal;
@@ -109,7 +109,7 @@ export class RiverSide implements Rule {
   caclCurrentVal(currentVal: CardVal, card: Card): CardVal {
     let returnVal: CardVal = {
       number: card.number,
-      color: card.color,
+      color: card.cardColor,
       isRare: card.type == CardType.RARE
     };
     return returnVal;
@@ -125,7 +125,7 @@ export class Valley implements Rule {
   caclCurrentVal(currentVal: CardVal, card: Card): CardVal {
     let returnVal: CardVal = {
       number: card.number,
-      color: card.color,
+      color: card.cardColor,
       isRare: card.type == CardType.RARE
     };
     return returnVal;
@@ -159,7 +159,7 @@ export class Desert implements Rule {
   caclCurrentVal(currentVal: CardVal, card: Card): CardVal {
     let returnVal: CardVal = {
       number: card.number,
-      color: card.color,
+      color: card.cardColor,
       isRare: card.type == CardType.RARE
     };
     if (card.isRare) {
@@ -185,10 +185,10 @@ export class Lake implements Rule {
       return true;
     }
     if (
-      card.color[0] == this.getNextColor(currentVal.color[0]!) ||
-      card.color[0] == this.getNextColor(currentVal.color[1]!) ||
-      card.color[1] == this.getNextColor(currentVal.color[0]!) ||
-      card.color[1] == this.getNextColor(currentVal.color[1]!)
+      card.cardColor[0] == this.getNextColor(currentVal.color[0]!) ||
+      card.cardColor[0] == this.getNextColor(currentVal.color[1]!) ||
+      card.cardColor[1] == this.getNextColor(currentVal.color[0]!) ||
+      card.cardColor[1] == this.getNextColor(currentVal.color[1]!)
     ) {
       return true;
     }
@@ -201,15 +201,15 @@ export class Lake implements Rule {
       color: [this.getNextColor(currentVal.color[0]!), this.getNextColor(currentVal.color[1]!)],
       isRare: card.type == CardType.RARE
     };
-    if (currentVal.color[0] == Color.NONE && card.color[0] != Color.PURPLE) {
-      returnVal.color = card.color;
+    if (currentVal.color[0] == Color.NONE && card.cardColor[0] != Color.PURPLE) {
+      returnVal.color = card.cardColor;
     }
     
     return returnVal;
   }
 
   private isRare(card: Card): boolean {
-    return card.isRare || card.color![0] == Color.PURPLE;
+    return card.isRare || card.cardColor![0] == Color.PURPLE;
   }
 
   private getNextColor(color: Color) : Color {

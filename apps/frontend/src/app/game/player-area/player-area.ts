@@ -9,7 +9,6 @@ import { SocketService } from '../../core/socket.service';
 import { GameBoardStateService } from '../gameBoardState.service';
 import { GameActionStateService } from '../gameActionState.service';
 import { FieldDropZoneService } from '../field/field-drop-zone.service';
-import { AnimationService } from '../animation.service';
 
 @Component({
   selector: 'app-player-area',
@@ -24,7 +23,6 @@ export class PlayerArea {
   private socketService = inject(SocketService);
   private gameBoardState = inject(GameBoardStateService);
   private gameActionState = inject(GameActionStateService);
-  private animationService = inject(AnimationService);
   private dropZone = inject(FieldDropZoneService);
 
   players = this.gameBoardState.players;
@@ -103,7 +101,6 @@ export class PlayerArea {
     } else {
       const fieldIdx = target;
       if (this.validField()[fieldIdx]) {
-        this.animationService.addState(cardId);
         this.socketService.emit(GameEvent.PLAY_CARD_TO_FIELD, {
           roomId: sessionStorage.getItem('roomId'),
           fieldIdx,

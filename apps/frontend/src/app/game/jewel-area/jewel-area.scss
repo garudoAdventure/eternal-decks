@@ -17,24 +17,22 @@
   background-size: cover;
 
   .jewel-token {
-    position: relative;
+    position: absolute;
     display: inline-block;
     margin-bottom: 1px;
 
-    &:nth-child(2n + 1) {
-      margin-right: 60px;
-    }
-
-    &.hidden {
-      visibility: hidden;
-    }
+    &#jewel-1 { left: 160px; }
+    &#jewel-2 { top: 66px; }
+    &#jewel-3 { top: 66px; left: 160px; }
+    &#jewel-4 { top: 104px; }
+    &#jewel-5 { top: 104px; left: 160px; }
 
     &.clickable {
       animation: bloom2 1s linear infinite alternate;
       cursor: pointer;
 
       &:hover {
-        top: -5px;
+        transform: translateY(-5px);
       }
     }
   }

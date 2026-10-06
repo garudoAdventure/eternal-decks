@@ -1,4 +1,4 @@
-import { Color, CardGroup, CardType, StateData } from "@shared/types";
+import { Color, CardGroup, CardType, StateData, GameOverReason } from "@shared/types";
 import { PlayerState } from "./PlayerState";
 import { SelectPlayerState } from "./SelectPlayerState";
 import { SelectEternalState } from "./SelectEternalState";
@@ -9,57 +9,59 @@ export class MainState extends PlayerState {
   private selectedCardFlag: boolean[] = [];
   private draggingCard: Card = null;
 
-  constructor() {
-    super();
-    for (let i = 0; i < 10; i++) {
-      this.selectedCardFlag.push(false);
+  override init() {
+    if (this.player.hand.length === 0) {
+      this.game.gameOver(GameOverReason.DECK_EXHAUSTED);
     }
+
+    this.player.hand.forEach(() => {
+      this.selectedCardFlag.push(false);
+    });
   }
 
   override selectCard(cardIdx: number): void {
     this.selectedCardFlag[cardIdx] = !this.selectedCardFlag[cardIdx];
-    this.game.emitGameData();
+    this.game.emitAvailableMove();
   }
 
   override dragCard(cardIdx: number): void {
     this.draggingCard = this.player.hand[cardIdx];
-    this.game.emitGameData();
+    this.game.emitAvailableMove();
   }
 
   override playCardToField(fieldIdx: number, cardIdx: number): void {
     const card: Card = this.player.playCard(cardIdx);
     this.game.fields[fieldIdx]!.setCard(card);
 
+    this.game.movedItemId.push('card-' + card.id);
+
     if (card.type == CardType.RULE) {
       this.game.fields[fieldIdx]!.isTransToCamp = true;
     }
-
-    this.game.emit('playCardAnimation', {
-      playerId: this.player.id,
-      cardIdx: cardIdx,
-      card: card.getData(),
-      fieldIdx: fieldIdx
-    });
     
     this.game.fields[fieldIdx]!.handleFieldComplete(this.player, fieldIdx);
     this.game.emitGameData();
+    this.game.emitAvailableMove();
   }
 
   override playCardToRiver(cardIdx: number): void {
     const card: Card = this.player.playCard(cardIdx);
     this.game.river.setCard(this.player, [card]);
+
     this.player.turnEnd();
     this.game.emitGameData();
+    this.game.emitAvailableMove();
   }
 
   override selectHeart(heartIdx: number): void {
-    this.game.usedHeart[heartIdx] = true;
+    this.game.useHeart(heartIdx);
     this.player.changeState(new SelectPlayerState());
     this.game.emitGameData();
+    this.game.emitAvailableMove();
   }
 
   override selectJewel(jewelIdx: number): void {
-    if (jewelIdx == 5) { this.game.getStar[3] = true; }
+    if (jewelIdx == 5) { this.game.getStar(3); }
 
     let playCard: Card[] = [];
     for (let i = this.selectedCardFlag.length - 1; i >= 0; i--) {
@@ -71,25 +73,34 @@ export class MainState extends PlayerState {
 
     this.player.changeState(new SelectEternalState(jewelIdx));
     this.game.emitGameData();
+    this.game.emitAvailableMove();
   }
 
   override useAbilityCard(cardIdx: number) {
     let card: Card = this.player.hand[cardIdx]!;
     if (card.group != CardGroup.MINOTAUR) {
       card = this.player.playCard(cardIdx);
-      this.game.discard.push(card);
+      if (
+        card.group != CardGroup.PHOENIX &&
+        card.group != CardGroup.MERMAID &&
+        card.group != CardGroup.KING
+      ) {
+        this.game.discard.push(card);
+      }
     }
     if (card instanceof AbilityCard) {
       card.play(this.player);
     }
+    this.game.movedItemId.push('card-' + card.id);
     this.game.emitGameData();
+    this.game.emitAvailableMove();
   }
 
   override getAvailableMove(): StateData {
     this.stateData.message = '請打出一張牌，或是使用愛心，或是生成水晶。';
     this.stateData.validField = this.getValidField();
     this.stateData.validJewel = this.getValidJewel();
-    this.stateData.validHeart = this.game.usedHeart.map((used) => !used);;
+    this.stateData.validHeart = this.game.Hearts.map((used) => !used);
     this.stateData.selectedCard = this.selectedCardFlag;
     return this.stateData;
   }
@@ -119,11 +130,10 @@ export class MainState extends PlayerState {
 
   private getValidJewel() {
     let validJewel: boolean[] = [false, false, false, false, false, false];
-    let hasCurseEternal: boolean = false;
-    for (let curseEternal of this.game.eternals) {
-      hasCurseEternal = hasCurseEternal || curseEternal.isCurse;
+
+    if (this.game.eternals.filter((eternal) => eternal.isCurse).length === 0) {
+      return validJewel;
     }
-    if (!hasCurseEternal) { return validJewel; }
     
     let selectedCard: Card[] = [];
     let rareCardNum = 0;
@@ -135,10 +145,8 @@ export class MainState extends PlayerState {
       if (!this.selectedCardFlag[i]) { continue; }
       
       let card: Card = this.player.hand[i]!;
-      if (card.type == CardType.ABILITY) {
-        return validJewel;
-      }
-      if (card.type == CardType.RARE) {
+      if (card.type === CardType.ABILITY) { return validJewel; }
+      if (card.type === CardType.RARE) {
         rareCardNum++;
       } else {
         if (card.number == 1) { oneFiveNineFlag[0] = true; }
@@ -146,16 +154,16 @@ export class MainState extends PlayerState {
         if (card.number == 9) { oneFiveNineFlag[2] = true; }
 
         if (!card.isDoubleColor) {
-          colorCount[card.color![0]!]!++;
-          colorFlag[card.color![0]!] = true;
+          colorCount[card.cardColor[0]]!++;
+          colorFlag[card.cardColor[0]] = true;
         } else {
-          colorCount[card.color![0]!]!++;
-          colorCount[card.color![1]!]!++;
-          if (card.color![0] == Color.RED || card.color![1] == Color.RED) {
-            doubleColorNum[0]!++;
+          colorCount[card.cardColor[0]]!++;
+          colorCount[card.cardColor[1]]!++;
+          if (card.cardColor[0] == Color.RED || card.cardColor[1] == Color.RED) {
+            doubleColorNum[0]++;
           }
-          if (card.color![0] == Color.BLUE || card.color![1] == Color.BLUE) {
-            doubleColorNum[1]!++;
+          if (card.cardColor[0] == Color.BLUE || card.cardColor[1] == Color.BLUE) {
+            doubleColorNum[1]++;
           }
         }
       }
@@ -182,17 +190,17 @@ export class MainState extends PlayerState {
     selectedCard = selectedCard.sort((a: Card, b: Card) => { return a.number! - b.number!; });
     
     if (selectedCard.length == 1) {
-      if (rareCardNum != 0 ||
-        selectedCard[0]!.number == 1 || selectedCard[0]!.number == 9
+      if (rareCardNum > 0 ||
+        selectedCard[0].number == 1 || selectedCard[0].number == 9
       ) {
-        validJewel[0] = !this.game.genJewels[0];
+        validJewel[0] = true;
         return validJewel;
       }
     }
 
     if (selectedCard.length == 2) {
-      if (rareCardNum != 0 || selectedCard[0]!.number == selectedCard[1]!.number) {
-        validJewel[1] = !this.game.genJewels[1];
+      if (rareCardNum != 0 || selectedCard[0].number == selectedCard[1].number) {
+        validJewel[1] = true;
         return validJewel;
       }
     }
@@ -200,14 +208,14 @@ export class MainState extends PlayerState {
     if (selectedCard.length == 3) {
       if (
         rareCardNum == 2 ||
-        rareCardNum == 1 && selectedCard[1]!.number == selectedCard[2]!.number ||
-        selectedCard[0]!.number == selectedCard[2]!.number
+        rareCardNum == 1 && selectedCard[1].number == selectedCard[2].number ||
+        selectedCard[0].number == selectedCard[2].number
       ) {
-        validJewel[3] = !this.game.genJewels[3];
+        validJewel[3] = true;
       }
 
       if (rareCardNum + oneFiveNineFlag.filter((flag) => flag).length == 3) {
-        validJewel[5] = !this.game.genJewels[5];
+        validJewel[5] = true;
       }
 
       if (
@@ -215,7 +223,7 @@ export class MainState extends PlayerState {
         rareCardNum == 1 && colorCount.find(count => count == 2) ||
         colorCount.find(count => count == 3)
       ) {
-        validJewel[2] = !this.game.genJewels[2];
+        validJewel[2] = true;
       }
 
       if (
@@ -223,7 +231,7 @@ export class MainState extends PlayerState {
         rareCardNum == 1 && colorFlag.filter((flag) => flag).length == 2 ||
         colorFlag.filter((flag) => flag).length == 3
       ) {
-        validJewel[4] = !this.game.genJewels[4];
+        validJewel[4] = true;
       }
     }
     return validJewel;
