@@ -1,0 +1,10 @@
+@if (cardPreview.preview().isShow) {
+  <div class="card-preview-bg"
+    [style.left.px]="cardPreview.preview().x"
+    [style.top.px]="cardPreview.preview().y"
+  >
+    <div class="card-preview"
+      [style.background-image]="cardPreview.preview().cardImg"
+    ></div>
+  </div>
+}

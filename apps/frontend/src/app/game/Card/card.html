@@ -1,6 +1,9 @@
 <div class="card" 
   [class.flipped]="card.isBack"
   [class.isRotate]="card.isRotate"
+  (mouseenter)="onMouseEnter($event)"
+  (mousemove)="onMouseMove()"
+  (mouseleave)="onMouseLeave()"
 >
   <div class="card-face card-front"
     [style.background-image]="getCardImg(card)"

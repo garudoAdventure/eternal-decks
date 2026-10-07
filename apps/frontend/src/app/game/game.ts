@@ -15,13 +15,14 @@ import { GameBoardStateService } from './gameBoardState.service';
 import { GameActionStateService } from './gameActionState.service';
 import { GameOverOverlay } from './gameover-overlay/gameover-overlay';
 import { StageClearOverlay } from './stage-clear-overlay.ts/stage-clear-overlay';
+import { CardPreviewOverlay } from './card-preview-overlay/card-preview-overlay';
 
 @Component({
   selector: 'app-game',
   imports: [
     CommonModule, MatButtonModule,
     ReviveArea, Field, River, Discard, PlayerArea, JewelArea, StageArea, HeartArea,
-    GameOverOverlay, StageClearOverlay
+    CardPreviewOverlay, GameOverOverlay, StageClearOverlay
   ],
   templateUrl: './game.html',
   styleUrl: './game.scss',

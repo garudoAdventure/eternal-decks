@@ -1,0 +1,28 @@
+.card-preview-bg {
+  position: fixed;
+  top: 35%;
+  left: 45%;
+  width: 225px;
+  height: 325px;
+  padding: 20px;
+  border-radius: 1em;
+  background-color: rgba(255, 255, 255, 0.9);
+  pointer-events: none;
+  z-index: 5000;
+  animation: fadeIn 0.15s ease-out;
+}
+
+.card-preview {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+  
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

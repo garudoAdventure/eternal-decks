@@ -1,6 +1,8 @@
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CardData, CardGroup, CardType } from '@shared/types';
+import { CardPreviewService } from '../../core/card-preview.service';
+import { FieldDropZoneService } from '../field/field-drop-zone.service';
 
 @Component({
   selector: 'app-card',
@@ -11,26 +13,34 @@ import { CardData, CardGroup, CardType } from '@shared/types';
 export class Card {
   @Input() card!: CardData;
 
-  cardImg: string = '';
+  private cardPreview = inject(CardPreviewService);
+  private dropZone = inject(FieldDropZoneService);
+  private timeoutId!: NodeJS.Timeout;
 
-  // showCardPreview($event: any) {
-  //   if (this.card.group == CardGroup.NONE && this.card.type == CardType.NONE) {
-  //     return;
-  //   }
-  //   let rect = $event.target.getBoundingClientRect();
-  //   this.gameService.cardPreview = {
-  //     isShow: true,
-  //     cardImg: this.cardImg,
-  //     top: rect.top + window.pageYOffset,
-  //     left: rect.left + window.pageXOffset + rect.width
-  //   };
-  // }
+  onMouseEnter(event: MouseEvent) {
+    if (this.card.group === CardGroup.NONE && this.card.type === CardType.NONE) return;
+    this.timeoutId = setTimeout(() => {
+      if (this.dropZone.isDragging()) return;
+      if (!this.card.isBack) {
+        this.cardPreview.show(this.getCardImg(this.card));
+      } else {
+        this.cardPreview.show(this.getCardBackImg(this.card));
+      }
+      this.cardPreview.updatePosition(event.clientX, event.clientY);
+    }, 800); 
+  }
 
-  // closeCardPreview() {
-  //   this.gameService.cardPreview.isShow = false;
-  //   this.gameService.cardPreview.top = 0;
-  //   this.gameService.cardPreview.left = 0;
-  // }
+  onMouseMove() {
+    if (this.dropZone.isDragging()) {
+      clearTimeout(this.timeoutId);
+      this.cardPreview.hide();
+    }
+  }
+
+  onMouseLeave() {
+    clearTimeout(this.timeoutId);
+    this.cardPreview.hide();
+  }
 
   getCardImg(card: CardData): string {
     let imgUrl: string = '';
@@ -50,7 +60,6 @@ export class Card {
       default:
         imgUrl = './asset/card/' + this.getGroupStr(card.group) + '/deck/' + card.subID + '.jpg';
     }
-    this.cardImg = imgUrl;
     return 'url(' + imgUrl + ')';
   }
 
