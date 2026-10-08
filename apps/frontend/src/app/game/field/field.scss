@@ -1,5 +1,10 @@
 @use '../global.scss';
-@use '../anim.scss';
+
+@property --glow-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
 
 .field-container {
   .field {
@@ -26,13 +31,37 @@
 
         .clickable {
           position: relative;
-          
+          isolation: isolate;
+
+          &::before, &::after {
+            content: '';
+            position: absolute;
+            top: -1px;
+            inset: -1px -1px 1px;
+            border-radius: inherit;
+
+            background: conic-gradient(
+              from var(--glow-angle),
+              red,
+              orange,
+              yellow,
+              green,
+              cyan,
+              blue,
+              purple,
+              red
+            );
+            z-index: -1;
+            animation: rotateBorder 3s linear infinite;
+          }
+
+          &::after {
+            filter: blur(10px);
+            opacity: 0.8;
+          }
+
           &:hover {
-            top: -5px;
-            box-shadow:
-              0px 0px 10px #724b80,
-              0px 0px 10px #724b80,
-              0px 0px 10px #724b80;
+            transform: translateY(-10px);
           }
         }
       }
@@ -82,4 +111,8 @@
     box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.9), 0 0 20px 6px rgba(76, 175, 80, 0.6);
     background-color: rgba(76, 175, 80, 0.2);
   }
+}
+
+@keyframes rotateBorder {
+  to { --glow-angle: 360deg; }
 }

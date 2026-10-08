@@ -1,6 +1,6 @@
 import { PlayerState } from "./PlayerState";
 import { Card } from "../entities/Card";
-import { StateData } from "@shared/types";
+import { CardType, StateData } from "@shared/types";
 
 export class SelectFieldCardState extends PlayerState {
   private minotaurCard: Card;
@@ -11,10 +11,16 @@ export class SelectFieldCardState extends PlayerState {
   }
 
   override selectFieldCard(fieldIdx: number, cardIdx: number): void {
-    let card: Card = this.game.fields[fieldIdx]!.cards[cardIdx]!;
+    let card: Card = this.game.fields[fieldIdx].cards[cardIdx];
+
+    if (card.type === CardType.RULE) return;
+
     this.player.hand.push(card);
-    this.game.fields[fieldIdx]!.cards[cardIdx]! = this.minotaurCard;
-    this.game.fields[fieldIdx]!.reCaclCurrentVal();
+    this.game.fields[fieldIdx].cards[cardIdx] = this.minotaurCard;
+    this.game.fields[fieldIdx].reCaclCurrentVal();
+
+    this.game.movedItemId.push('card-' + this.minotaurCard.id);
+    this.game.movedItemId.push('card-' + card.id);
     
     let idx = 0;
     for (let card of this.player.hand) {

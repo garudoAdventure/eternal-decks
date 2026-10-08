@@ -28,6 +28,8 @@ export class PlayerArea {
   players = this.gameBoardState.players;
   selectedCard = this.gameActionState.selectedCard;
   validField = this.gameActionState.validField;
+  validPlayer = this.gameActionState.validPlayer;
+  validHandCard = this.gameActionState.validHandCard;
 
   cardDragDistance = 0;
 

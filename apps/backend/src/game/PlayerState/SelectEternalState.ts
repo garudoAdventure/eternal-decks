@@ -39,7 +39,7 @@ export class SelectEternalState extends PlayerState {
   }
 
   override getAvailableMove(): StateData {
-    this.stateData.message = '請選擇一個已復活的神獸。';
+    this.stateData.message = '請選擇一個已甦醒的神獸。';
     this.stateData.validEternal = this.game.eternals.map((eternal) => eternal.isCurse);
     return this.stateData;
   }

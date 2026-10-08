@@ -8,8 +8,9 @@ export interface StateData {
   validJewel: boolean[];
   validEternal: boolean[];
   validFieldEternal: boolean[];
-  selectedCard: boolean[];
-  validPlayer: boolean;
+  validPlayer: boolean[];
   validRiverCard: boolean;
   validFieldCard: boolean;
+  selectedCard: boolean[];
+  validHandCard: boolean[];
 };

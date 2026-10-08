@@ -13,9 +13,10 @@ export class PlayerState {
     validEternal: [false, false, false, false, false, false, false, false, false],
     selectedCard: [],
     validFieldEternal: [false, false, false],
-    validPlayer: false,
+    validPlayer: [false, false, false, false],
     validRiverCard: false,
-    validFieldCard: false
+    validFieldCard: false,
+    validHandCard: []
   };
 
   get game(): Game { return this.player.game; }
@@ -43,4 +44,9 @@ export class PlayerState {
 };
 
 export class IdleState extends PlayerState {
+  override init() {
+    this.player.hand.forEach(() => {
+      this.stateData.validHandCard.push(false);
+    })
+  }
 }

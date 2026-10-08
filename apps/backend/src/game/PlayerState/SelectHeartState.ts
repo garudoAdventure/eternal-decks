@@ -3,7 +3,8 @@ import { StateData } from "@shared/types";
 
 export class SelectHeartState extends PlayerState {
   override selectHeart(heartIdx: number): void {
-    this.game.useHeart(heartIdx);
+    this.game.setHeart(heartIdx, false);
+
     this.player.turnEnd();
     this.game.emitGameData();
     this.game.emitAvailableMove();

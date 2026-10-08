@@ -16,6 +16,7 @@ export class MainState extends PlayerState {
 
     this.player.hand.forEach(() => {
       this.selectedCardFlag.push(false);
+      this.stateData.validHandCard.push(false);
     });
   }
 
@@ -31,15 +32,15 @@ export class MainState extends PlayerState {
 
   override playCardToField(fieldIdx: number, cardIdx: number): void {
     const card: Card = this.player.playCard(cardIdx);
-    this.game.fields[fieldIdx]!.setCard(card);
+    this.game.fields[fieldIdx].setCard(card);
 
     this.game.movedItemId.push('card-' + card.id);
 
-    if (card.type == CardType.RULE) {
-      this.game.fields[fieldIdx]!.isTransToCamp = true;
+    if (card.type === CardType.RULE) {
+      this.game.fields[fieldIdx].isTransToCamp = true;
     }
     
-    this.game.fields[fieldIdx]!.handleFieldComplete(this.player, fieldIdx);
+    this.game.fields[fieldIdx].handleFieldComplete(this.player, fieldIdx);
     this.game.emitGameData();
     this.game.emitAvailableMove();
   }
@@ -54,7 +55,7 @@ export class MainState extends PlayerState {
   }
 
   override selectHeart(heartIdx: number): void {
-    this.game.useHeart(heartIdx);
+    this.game.setHeart(heartIdx, true);
     this.player.changeState(new SelectPlayerState());
     this.game.emitGameData();
     this.game.emitAvailableMove();
@@ -102,13 +103,20 @@ export class MainState extends PlayerState {
     this.stateData.validJewel = this.getValidJewel();
     this.stateData.validHeart = this.game.Hearts.map((used) => !used);
     this.stateData.selectedCard = this.selectedCardFlag;
+    this.stateData.validHandCard = this.getValidHandCard();
     return this.stateData;
   }
 
   private getValidField(): boolean[] {
     let validField: boolean[] = [false, false, false];
 
-    if (this.draggingCard === null) { return validField; }
+    if (this.draggingCard === null || this.draggingCard.type === CardType.ABILITY) {
+      return validField;
+    }
+
+    if (this.draggingCard.type === CardType.RULE) {
+      return [true, true, true];
+    }
     
     let cardValid = true;
     for (let eternal of this.game.eternals) {
@@ -235,5 +243,18 @@ export class MainState extends PlayerState {
       }
     }
     return validJewel;
+  }
+
+  private getValidHandCard() {
+    let validHandCard = [];
+    this.player.hand.forEach((card) => {
+      let isValid = true;
+      this.game.eternals.forEach(eternal => {
+        if (!eternal.isCurse) return; 
+        isValid = isValid && eternal.isValid(card);
+      });
+      validHandCard.push(isValid);
+    });
+    return validHandCard;
   }
 }

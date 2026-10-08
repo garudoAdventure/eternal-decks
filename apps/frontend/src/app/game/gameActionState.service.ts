@@ -24,7 +24,8 @@ export class GameActionStateService {
   readonly validEternal = computed(() => this.interactionState()?.validEternal ?? []);
   readonly validFieldEternal = computed(() => this.interactionState()?.validFieldEternal ?? []);
   readonly selectedCard = computed(() => this.interactionState()?.selectedCard ?? []);
-  readonly validPlayer = computed(() => this.interactionState()?.validPlayer ?? false);
+  readonly validPlayer = computed(() => this.interactionState()?.validPlayer ?? []);
   readonly validRiverCard = computed(() => this.interactionState()?.validRiverCard ?? false);
   readonly validFieldCard = computed(() => this.interactionState()?.validFieldCard ?? false);
+  readonly validHandCard = computed(() => this.interactionState()?.validHandCard ?? []);
 }

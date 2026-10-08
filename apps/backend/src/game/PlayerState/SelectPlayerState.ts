@@ -10,7 +10,7 @@ export class SelectPlayerState extends PlayerState {
 
   override getAvailableMove(): StateData {
     this.stateData.message = '請選擇一位玩家。';
-    this.stateData.validPlayer = true;
+    this.stateData.validPlayer = [false, true, true, true];
     return this.stateData;
   }
 }

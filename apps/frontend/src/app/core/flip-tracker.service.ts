@@ -7,7 +7,6 @@ gsap.registerPlugin(Flip);
 @Injectable({ providedIn: 'root' })
 export class FlipTrackerService {
   private pendingState: Flip.FlipState[] = [];
-  private timeline = gsap.timeline();
 
   capture(movedItemIds: string[]) {
     movedItemIds.forEach(id => {
@@ -16,22 +15,28 @@ export class FlipTrackerService {
     });
   }
 
-  play(options: { duration?: number; ease?: string } = {}) {
-    if (!this.pendingState) return;
+  play(options: { duration?: number; ease?: string; onAllComplete?: () => void } = {}) {
+    if (this.pendingState.length === 0) {
+      options.onAllComplete?.();
+      return;
+    };
+
+    const timeline = gsap.timeline({
+      onComplete: () => {
+        options.onAllComplete?.();
+      }
+    });
 
     this.pendingState.forEach(state => {
       const target = '[data-flip-id="' + state.elementStates[0].id +'"]';
-      this.timeline.add(
+      gsap.set(target, { zIndex: 999 });
+
+      timeline.add(
         Flip.from(state, {
           targets: target,
           duration: options.duration ?? 0.5,
           ease: options.ease ?? 'power2.out',
-          // onEnter: (elements) => {
-          //   gsap.fromTo(elements, { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.3 });
-          // },
-          // onLeave: (elements) => {
-          //   gsap.to(elements, { opacity: 0, duration: 0.3 });
-          // },
+          absolute: true,
           onComplete: () => {
             gsap.set(target, { clearProps: 'all' });
           },

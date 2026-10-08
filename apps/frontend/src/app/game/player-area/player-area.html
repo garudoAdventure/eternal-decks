@@ -1,9 +1,12 @@
 <div id="player-container">
   @for(player of players(); track $index; let playerIdx = $index) {
-    <mat-card class="player">
+    <mat-card class="player"
+      [class.is-valid]="validPlayer()[$index]"
+      (click)="onSelectPlayer(player.id)"
+    >
       <mat-card-header>
         <div class="player-token">
-          <div class="token-img" [ngClass]="getColorStr(player.color)" (click)="onSelectPlayer(player.id)"></div>
+          <div class="token-img" [ngClass]="getColorStr(player.color)"></div>
         </div>
         <div class="player-name">{{ player.name }}</div>
       </mat-card-header>
@@ -21,24 +24,23 @@
             } @else {
               <div class="card-container card-l"
                 [class.selected]="selectedCard()[cardIdx]"
+                [class.is-valid]="validHandCard()[cardIdx]"
                 [attr.data-flip-id]="'card-' + card.id"
                 (click)="resetCardDragDistance()"
                 (mouseup)="onSelectCard(cardIdx)"
 
                 cdkDrag
-                [cdkDragDisabled]="card.type == CardType.ABILITY"
                 [cdkDragData]="cardIdx"
                 (cdkDragStarted)="onDragStarted($event, cardIdx)"
                 (cdkDragMoved)="onDragMoved($event)"
                 (cdkDragEnded)="onDragEnded($event, card.id)"
               >
+                <app-card [card]="card"></app-card>
                 @if (card.type == CardType.ABILITY) {
-                  <app-card [card]="card"></app-card>
                   <div class="use-btn" (click)="useCard(cardIdx)">
                     <mat-icon>check</mat-icon>
                   </div>
                 } @else {
-                  <app-card [card]="card"></app-card>
                   <div class="rotate-btn" (click)="rotateCard(cardIdx)">
                     <mat-icon>cached</mat-icon>
                   </div>

@@ -12,5 +12,5 @@ export class StageArea {
   private gameBoardState = inject(GameBoardStateService);
 
   starCard = this.gameBoardState.starCard;
-  getStar = this.gameBoardState.stars;
+  getStars = this.gameBoardState.getStars;
 }

@@ -9,18 +9,33 @@ import { FlipTrackerService } from "../core/flip-tracker.service";
 export class GameBoardStateService {
   private socket = inject(SocketService);
   private flipTracker = inject(FlipTrackerService);
+  private dataQueue: GameBoard[] = [];
+  private isProcessing  = false;
 
   private readonly boardState = signal<GameBoard | null>(null);
 
   constructor() {
     this.socket.on<GameBoard>('updateGameData').subscribe((data) => {
-      this.flipTracker.capture(data.movedItemId);
+      this.dataQueue.push(data);
+      this.proccessNext();
+    });
+  }
 
-      console.log(data);
-      this.boardState.set(data);
-        
-      requestAnimationFrame(() => {
-        this.flipTracker.play();
+  private proccessNext() {
+    if (this.isProcessing || this.dataQueue.length === 0) return;
+
+    this.isProcessing = true;
+    const data = this.dataQueue.shift()!;
+    this.flipTracker.capture(data.movedItemId);
+
+    this.boardState.set(data);
+      
+    requestAnimationFrame(() => {
+      this.flipTracker.play({
+        onAllComplete: () => {
+          this.isProcessing = false;
+          this.proccessNext();
+        }
       });
     });
   }
@@ -38,12 +53,13 @@ export class GameBoardStateService {
 
   readonly players = computed(() => this.boardState()?.players ?? []);
   readonly hearts = computed(() => this.boardState()?.hearts ?? []);
-  readonly jewels = computed(() => this.boardState()?.genJewel ?? []);
-  readonly stars = computed(() => this.boardState()?.getStar ?? []);
+  readonly jewels = computed(() => this.boardState()?.jewels ?? []);
+  readonly stars = computed(() => this.boardState()?.stars ?? []);
   readonly river = computed(() => this.boardState()?.river ?? { cards: [], rareCards: [], gameOverCard: this.emptyCardData });
   readonly fields = computed(() => this.boardState()?.fields ?? []);
   readonly eternals = computed(() => this.boardState()?.eternals ?? []);
   readonly starCard = computed(() => this.boardState()?.starCard ?? []);
+  readonly getStars = computed(() => this.boardState()?.getStars ?? []);
   readonly discard = computed(() => this.boardState()?.discard ?? []);
   readonly campBonus = computed(() => this.boardState()?.campBonus ?? null);
 }

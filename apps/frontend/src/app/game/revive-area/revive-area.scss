@@ -1,5 +1,4 @@
 @use '../global.scss';
-@use '../anim.scss';
 @use '../jewel-area/jewel-area.scss';
 
 .eternal-container {
@@ -14,12 +13,8 @@
     &:last-child { margin-right: 0px; }
 
     &.clickable {
-      animation: float 1s ease-in-out infinite alternate;
-      box-shadow: 0 0 15px red;
-      transition: box-shadow 0.5s linear;
-
       &:hover {
-        box-shadow: 0 0 15px green;
+        transform: translateY(-10px);
       }
     }
 

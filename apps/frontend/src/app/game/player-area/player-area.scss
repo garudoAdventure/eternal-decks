@@ -1,5 +1,7 @@
 @use '../global.scss';
 
+$pulseColor: #60f931;
+
 #player-container {
   display: flex;
   flex-direction: column;
@@ -13,6 +15,16 @@
   margin-bottom: 10px;
   background-color: lavender;
   width: 500px;
+
+  &.is-valid {
+    cursor: pointer;
+    box-shadow:
+      0 0 5px $pulseColor,
+      0 0 10px $pulseColor,
+      0 0 20px $pulseColor;
+
+    animation: pulse 1.5s ease-in-out infinite;
+  }
 
   mat-card-header {
     align-items: center;
@@ -63,31 +75,47 @@
       position: relative;
       display: inline-block;
       margin-right: 5px;
-      // animation: cardDrawIn 0.3s ease-out;
+    }
+  }
 
-      .rotate-btn, .use-btn {
-        display: none;
-        position: absolute;
-        top: calc(50% - 12px);
-        left: calc(50% - 12px);
-        width: 25px;
-        height: 25px;
-        border-radius: 1em;
-        background-color: antiquewhite;
-      }
-
-      &.selected { top: -10px; }
-
-      &:hover {
-        top: -10px;
-        cursor: pointer;
-
+  &:first-child {
+    .hand-card {
+      .card-container {
         .rotate-btn, .use-btn {
-          display: block;
+          display: none;
+          position: absolute;
+          top: calc(50% - 12px);
+          left: calc(50% - 12px);
+          width: 25px;
+          height: 25px;
+          border-radius: 1em;
+          background-color: antiquewhite;
+        }
 
-          &:hover {
-            background-color: lightgray;
-            cursor: pointer;
+        &.is-valid {
+          box-shadow:
+            0 0 5px $pulseColor,
+            0 0 10px $pulseColor,
+            0 0 20px $pulseColor;
+
+          animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        &.selected {
+          transform: translateY(-10px);
+        }
+
+        &:hover {
+          transform: translateY(-10px);
+          cursor: pointer;
+
+          .rotate-btn, .use-btn {
+            display: block;
+
+            &:hover {
+              background-color: lightgray;
+              cursor: pointer;
+            }
           }
         }
       }
@@ -97,10 +125,6 @@
 
 .cdk-drag {
   cursor: grab;
-
-  &:not(.cdk-drag-dragging) {
-    // transition: transform 0.2s ease;
-  }
 
   &.cdk-drag-dragging {
     cursor: grabbing;
@@ -122,5 +146,19 @@
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes pulse {
+  0%,100% {
+    box-shadow:
+      0 0 5px $pulseColor,
+      0 0 10px $pulseColor;
+  }
+
+  50% {
+    box-shadow:
+      0 0 15px $pulseColor,
+      0 0 30px $pulseColor;
   }
 }
