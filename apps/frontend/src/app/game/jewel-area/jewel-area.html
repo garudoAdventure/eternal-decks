@@ -1,4 +1,6 @@
-<div class="jewel-container">
+<div class="jewel-container"
+  [class.three-player]="jewels().length !== 8"
+>
   @for (genJewel of jewels(); track $index){
     @if (!genJewel) {
       <div class="jewel-token"
@@ -8,5 +10,10 @@
         (click)="onSelectJewel($index)"
       ></div>
     }
+  }
+  @if (!stars()[3]) {
+    <div class="star-token" id="star-3"
+      [attr.data-flip-id]="'star-3'"
+    ></div>
   }
 </div>

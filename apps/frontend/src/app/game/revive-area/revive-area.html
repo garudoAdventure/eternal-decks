@@ -13,4 +13,21 @@
       }
     </div>
   }
+  <div class="star-container">
+  @if (!stars()[0]) {
+    <div class="star-token" id="star-0"
+      [attr.data-flip-id]="'star-0'"
+    ></div>
+  }
+  @if (!stars()[1]) {
+    <div class="star-token" id="star-1"
+      [attr.data-flip-id]="'star-1'"
+    ></div>
+  }
+  @if (!stars()[2]) {
+    <div class="star-token" id="star-2"
+      [attr.data-flip-id]="'star-2'"
+    ></div>
+  }
+  </div>
 </div>

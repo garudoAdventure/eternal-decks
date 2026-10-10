@@ -1,22 +1,28 @@
 @use '../global.scss';
 
 .star-card-container {
-  position: absolute;
-  top: 206px;
-  left: 292px;
+  display: inline-block;
+  position: relative;
+  width: 325px;
+  height: 130px;
 
   .card-m {
     display: inline-block;
     margin-right: 8px;
     &:nth-child(2) { margin-right: 41px; }
   }
+
+  .star-token {
+    top: 45px;
+    left: 258px;
+  }
 }
 
 .collect-star-container {
-  position: absolute;
-  top: 230px;
-  left: 632px;
-  width: 64px;
+  display: inline-block;
+  position: relative;
+  width: 90px;
+  height: 130px;
 
   .star-token {
     position: absolute;
@@ -26,9 +32,9 @@
     background-repeat: no-repeat;
     background-size: cover;
 
-    &:nth-child(1) { left: 15px; }
-    &:nth-child(2) { top: 18px; }
-    &:nth-child(3) { top: 18px; left: 31px; }
-    &:nth-child(4) { top: 37px; left: 15px; }
+    &:nth-child(1) { top: 22px; left: 30px; }
+    &:nth-child(2) { top: 42px; left: 16px; }
+    &:nth-child(3) { top: 42px; left: 45px; }
+    &:nth-child(4) { top: 59px; left: 30px; }
   }
 }

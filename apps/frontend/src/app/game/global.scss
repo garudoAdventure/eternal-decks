@@ -16,3 +16,13 @@
 .clickable {
   cursor: pointer;
 }
+
+.star-token {
+  position: absolute;
+  display: inline-block;
+  width: 32px;
+  height: 40px;
+  background-image: url("/asset/star.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+}

@@ -36,6 +36,12 @@
       left: 43px;
     }
 
+    app-stage-area {
+      position: absolute;
+      top: 206px;
+      left: 292px;
+    }
+
     app-field {
       position: absolute;
       top: 365px;
@@ -58,32 +64,6 @@
       position: absolute;
       top: 828px;
       left: 826px;
-    }
-
-    .star-token {
-      position: relative;
-      display: inline-block;
-      width: 32px;
-      height: 40px;
-      background-image: url("/asset/star.png");
-      background-repeat: no-repeat;
-      background-size: cover;
-    }
-
-    .star-container {
-      position: absolute;
-      top: 0px;
-      left: 0px;
-
-      .star-token {
-        position: absolute;
-        &#star-0 { top: 144px; left: 329px; }
-        &#star-1 { top: 144px; left: 641px; }
-        &#star-2 { top: 94px;  left: 890px; }
-        &#star-3 { top: 284px; left: 245px; }
-        &#star-4 { top: 251px; left: 550px; }
-        &#star-5 { top: 720px; left: 880px; }
-      }
     }
   }
 }

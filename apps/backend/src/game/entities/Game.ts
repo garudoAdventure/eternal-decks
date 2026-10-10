@@ -169,6 +169,10 @@ export class Game extends EventEmitter {
 
     this.players.sort((a: any, b: any) => a.color - b.color);
     this.players[this.currentPlayerIdx]!.changeState(new MainState());
+
+    if (this.players.length !== 3){
+      this.jewels.push(false, false);
+    }
   }
 
   stageClear() {

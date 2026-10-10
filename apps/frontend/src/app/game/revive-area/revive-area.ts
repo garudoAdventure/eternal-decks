@@ -13,10 +13,11 @@ import { GameActionStateService } from '../gameActionState.service';
 })
 export class ReviveArea {
   private socketService = inject(SocketService);
-  private gamebBoardState = inject(GameBoardStateService);
+  private gameBoardState = inject(GameBoardStateService);
   private gameActionState = inject(GameActionStateService);
 
-  eternals = this.gamebBoardState.eternals;
+  eternals = this.gameBoardState.eternals;
+  stars = this.gameBoardState.stars;
   validEternal = this.gameActionState.validEternal;
 
   onSelectEternal(index: number) {

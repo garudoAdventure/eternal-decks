@@ -9,7 +9,7 @@ export class PlayerState {
     button: { show: false, string: '' },
     validField: [false, false, false, false],
     validHeart: [false, false, false],
-    validJewel: [false, false, false, false, false, false],
+    validJewel: [false, false, false, false, false, false, false, false],
     validEternal: [false, false, false, false, false, false, false, false, false],
     selectedCard: [],
     validFieldEternal: [false, false, false],

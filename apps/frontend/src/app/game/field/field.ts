@@ -21,6 +21,7 @@ export class Field {
   private dropZone = inject(FieldDropZoneService);
 
   fields = this.gameBoardState.fields;
+  stars = this.gameBoardState.stars;
   campBonus = this.gameBoardState.campBonus;
   validField = this.gameActionState.validField;
   validFieldEternal = this.gameActionState.validFieldEternal;
@@ -49,22 +50,5 @@ export class Field {
       roomId: sessionStorage.getItem('roomId'),
       eternalIdx: index,
     });
-
-    // const state = Flip.getState(`[data-flip-id="card-${cardId}"] .card`);
-    // Flip.from(state, {
-    //   rotateY: 180,
-    //   duration: 0.5,
-    //   clearProps: false,
-    //   onComplete:() => {
-    //     this.animationService.addState(cardId);
-    //     this.fields()[fieldIdx].cards.forEach(card => {
-    //       this.animationService.addState(card.id);
-    //     });
-    //     this.socketService.emit(GameEvent.SELECT_FIELD_ETERNAL, {
-    //       roomId: sessionStorage.getItem('roomId'),
-    //       eternalIdx: index,
-    //     });
-    //   }
-    // });
   }
 }

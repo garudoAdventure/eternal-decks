@@ -13,10 +13,11 @@ import { GameActionStateService } from '../gameActionState.service';
 })
 export class JewelArea {
   private socketService = inject(SocketService);
-  private gamebBoardState = inject(GameBoardStateService);
+  private gameBoardState = inject(GameBoardStateService);
   private gameActionState = inject(GameActionStateService);
     
-  jewels = this.gamebBoardState.jewels;
+  jewels = this.gameBoardState.jewels;
+  stars = this.gameBoardState.stars;
   validJewel = this.gameActionState.validJewel;
 
   onSelectJewel(index: number) {

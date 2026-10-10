@@ -24,4 +24,10 @@
       left: calc(100% - 40px);
     }
   }
+  
+  .star-token {
+    &:nth-child(1) { top: 94px; left: 279px; }
+    &:nth-child(2) { top: 94px; left: 590px; }
+    &:nth-child(3) { top: 44px; left: 840px; }
+  }
 }

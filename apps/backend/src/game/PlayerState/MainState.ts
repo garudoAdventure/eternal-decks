@@ -137,7 +137,7 @@ export class MainState extends PlayerState {
   }
 
   private getValidJewel() {
-    let validJewel: boolean[] = [false, false, false, false, false, false];
+    let validJewel: boolean[] = [false, false, false, false, false, false, false, false];
 
     if (this.game.eternals.filter((eternal) => eternal.isCurse).length === 0) {
       return validJewel;
@@ -149,11 +149,12 @@ export class MainState extends PlayerState {
     let colorFlag: boolean[] = [false, false, false, false, false];
     let doubleColorNum: number[] = [0, 0]; // RED/GREEN, BLUE/YELLOW
     let oneFiveNineFlag: boolean[] = [false, false, false];
+    
     for (let i = 0; i < this.selectedCardFlag.length; i++) {
       if (!this.selectedCardFlag[i]) { continue; }
       
       let card: Card = this.player.hand[i]!;
-      if (card.type === CardType.ABILITY) { return validJewel; }
+      if (card.type === CardType.ABILITY || card.type === CardType.RULE) { return validJewel; }
       if (card.type === CardType.RARE) {
         rareCardNum++;
       } else {
@@ -197,7 +198,7 @@ export class MainState extends PlayerState {
 
     selectedCard = selectedCard.sort((a: Card, b: Card) => { return a.number! - b.number!; });
     
-    if (selectedCard.length == 1) {
+    if (selectedCard.length === 1) {
       if (rareCardNum > 0 ||
         selectedCard[0].number == 1 || selectedCard[0].number == 9
       ) {
@@ -207,6 +208,8 @@ export class MainState extends PlayerState {
     }
 
     if (selectedCard.length == 2) {
+      validJewel[6] = true;
+
       if (rareCardNum != 0 || selectedCard[0].number == selectedCard[1].number) {
         validJewel[1] = true;
         return validJewel;
@@ -214,6 +217,8 @@ export class MainState extends PlayerState {
     }
 
     if (selectedCard.length == 3) {
+      validJewel[7] = true;
+
       if (
         rareCardNum == 2 ||
         rareCardNum == 1 && selectedCard[1].number == selectedCard[2].number ||

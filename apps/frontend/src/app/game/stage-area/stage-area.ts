@@ -1,4 +1,4 @@
-import { Component, inject, computed } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { GameBoardStateService } from '../gameBoardState.service';
 import { Card } from '../Card/card';
 
@@ -11,6 +11,7 @@ import { Card } from '../Card/card';
 export class StageArea {
   private gameBoardState = inject(GameBoardStateService);
 
+  stars = this.gameBoardState.stars;
   starCard = this.gameBoardState.starCard;
   getStars = this.gameBoardState.getStars;
 }

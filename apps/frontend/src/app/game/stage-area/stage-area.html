@@ -1,10 +1,15 @@
 <div class="star-card-container">
   @for(card of starCard(); track $index) {
     <div class="card-m"
-        [attr.data-flip-id]="'card-' + card.id"
-      >
+      [attr.data-flip-id]="'card-' + card.id"
+    >
       <app-card [card]="card"></app-card>
     </div>
+  }
+  @if (!stars()[4]) {
+    <div class="star-token" id="star-4"
+      [attr.data-flip-id]="'star-4'"
+    ></div>
   }
 </div>
 <div class="collect-star-container">

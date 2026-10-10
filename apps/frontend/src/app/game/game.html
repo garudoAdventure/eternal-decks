@@ -16,16 +16,6 @@
       <app-heart-area></app-heart-area>
       <app-river></app-river>
       <app-discard></app-discard>
-      <div class="star-container">
-        @for(star of stars(); track $index) {
-          @if (!star) {
-            <div class="star-token"
-              [id]="'star-' + $index"
-              [attr.data-flip-id]="'star-' + $index"
-            ></div>
-          }
-        }
-      </div>
     </div>
     <app-player-area></app-player-area>
   </div>

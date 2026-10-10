@@ -36,12 +36,17 @@
         </div>
       </div>
       <div class="field-bonus">
-        @if (fieldIdx == 0 && campBonus() !== null) {
+        @if (fieldIdx === 0 && campBonus() !== null) {
           <div class="card-m"
             [attr.data-flip-id]="'card-' + campBonus()!.id"
           >
             <app-card [card]="campBonus()!"></app-card>
           </div>
+        }
+        @if (fieldIdx === 2 && !stars()[5]) {
+          <div class="star-token" id="star-5"
+            [attr.data-flip-id]="'star-5'"
+          ></div>
         }
       </div>
     </div>
