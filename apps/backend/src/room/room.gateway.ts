@@ -13,7 +13,7 @@ import { RoomStatus } from '@shared/types';
 import { RoomService } from './room.service';
 import { GameManagerService } from '../game/game-manager-service';
 
-@WebSocketGateway({ cors: { origin: '*' } })
+@WebSocketGateway({ cors: { origin: process.env.FRONTEND_URL ?? 'http://localhost:4200' } })
 export class RoomGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer() server: Server;
 

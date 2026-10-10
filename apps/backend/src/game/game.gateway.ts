@@ -11,7 +11,7 @@ import { Server, Socket } from 'socket.io';
 import { GameEvent } from '@shared/types';
 import { GameManagerService } from './game-manager-service';
 
-@WebSocketGateway({ cors: { origin: '*' } })
+@WebSocketGateway({ cors: { origin: process.env.FRONTEND_URL ?? 'http://localhost:4200' } })
 export class GameGateway implements OnGatewayDisconnect {
   @WebSocketServer() server: Server;
 

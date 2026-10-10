@@ -9,6 +9,7 @@ import { Room } from '@shared/types'
 import { SocketService } from '../core/socket.service';
 import { CreateRoomDialog } from './create-room-dialog/create-room-dialog';
 import { RoomWaitingDialog } from './room-waiting-dialog/room-waiting-dialog';
+import { API_BASE_URL } from '../core/api-config';
 
 @Component({
   selector: 'app-room-list',
@@ -35,7 +36,7 @@ export class RoomList implements OnInit {
       disableClose: true
     }).afterClosed().subscribe(result => {
       if (result) {
-        this.httpService.post('http://localhost:3000/api/room', result).subscribe({
+        this.httpService.post(API_BASE_URL + '/room', result).subscribe({
           next: (room: any) => {
             this.dialog.open(RoomWaitingDialog, {
               width: '600px',

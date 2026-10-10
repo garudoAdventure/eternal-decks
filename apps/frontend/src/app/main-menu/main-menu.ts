@@ -6,6 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { HttpClient } from '@angular/common/http';
 import { SocketService } from '../core/socket.service';
+import { API_BASE_URL } from '../core/api-config';
 
 @Component({
   selector: 'app-main-menu',
@@ -42,7 +43,7 @@ export class MainMenu {
       return;
     }
     const name = this.nameForm.get('name')?.value!;
-    this.httpService.post('http://localhost:3000/api/auth/regist', { name }).subscribe({
+    this.httpService.post(API_BASE_URL + '/auth/regist', { name }).subscribe({
       next: (data: any) => {
         sessionStorage.setItem('token', data.token);
         sessionStorage.setItem('playerName', name);

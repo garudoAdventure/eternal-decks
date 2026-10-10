@@ -1,13 +1,14 @@
 import { Injectable } from "@angular/core";
 import { fromEvent, Observable } from "rxjs";
 import { io, Socket } from "socket.io-client";
+import { SOCKET_URL } from "./api-config";
 
 @Injectable({ providedIn: 'root' })
 export class SocketService {
   private socket!: Socket;
 
   connect() {
-    this.socket = io('http://localhost:3000', {
+    this.socket = io(SOCKET_URL, {
       auth: {
         token: sessionStorage.getItem('token')
       }
