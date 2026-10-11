@@ -8,7 +8,7 @@ export enum GameEvent {
   PLAY_CARD_TO_FIELD = 'playCardToField',
   PLAY_CARD_TO_RIVER = 'playCardToRiver',
   SELECT_FIELD_CARD = 'selectFieldCard',
-  SELECT_FIELD_ETERNAL = 'selectEternal',
+  SELECT_FIELD_ETERNAL = 'selectFieldEternal',
   ROTATE_CARD = 'rotateCard',
   USE_CARD = 'useCard',
   CONFIRM_ACTION = 'confirmAction'
