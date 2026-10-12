@@ -4,6 +4,7 @@ import { SelectCardState } from "./SelectCardState";
 
 export class SelectPlayerState extends PlayerState {
   override selectPlayer(playerId: string): void {
+    if (this.player.id === playerId) return;
     this.player.changeState(new SelectCardState(playerId));
     this.game.emitAvailableMove();
   }

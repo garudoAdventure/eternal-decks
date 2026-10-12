@@ -22,7 +22,7 @@ export class Game extends EventEmitter {
   river: River = new River(this);
   eternals: Eternal[] = [];
   discard: Card[] = [];
-  private jewels: boolean[] = new Array(6).fill(false);
+  private jewels: boolean[] = new Array(8).fill(false);
   private hearts: boolean[] = new Array(3).fill(false);
   private stars: boolean[] = new Array(6).fill(false);
   private starCards: Card[] = [];
@@ -170,8 +170,8 @@ export class Game extends EventEmitter {
     this.players.sort((a: any, b: any) => a.color - b.color);
     this.players[this.currentPlayerIdx]!.changeState(new MainState());
 
-    if (this.players.length !== 3){
-      this.jewels.push(false, false);
+    if (this.players.length === 3){
+      this.jewels.splice(0, 2);
     }
   }
 

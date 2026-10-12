@@ -11,7 +11,7 @@ import { Server, Socket } from 'socket.io';
 import { JwtService } from '@nestjs/jwt';
 import { RoomStatus } from '@shared/types';
 import { RoomService } from './room.service';
-import { GameManagerService } from '../game/game-manager-service';
+import { GameManagerService } from '../game/game-manager.service';
 
 @WebSocketGateway({ cors: { origin: process.env.FRONTEND_URL ?? 'http://localhost:4200' } })
 export class RoomGateway implements OnGatewayConnection, OnGatewayDisconnect {
