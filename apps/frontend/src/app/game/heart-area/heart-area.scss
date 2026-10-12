@@ -1,20 +1,27 @@
+@use '../color.scss' as *;
+@use '../anim.scss';
+
 .heart-container {
   .heart-token {
     position: relative;
-    left: 0px;
     width: 36px;
     height: 32px;
     margin-bottom: 9px;
     background-image: url("/asset/heart.png");
     background-repeat: no-repeat;
     background-size: cover;
-    transition: left 0.5s;
+    transition: transform 0.3s;
     
-    &.isUsed { left: 50px; }
-    
-    &:hover.clickable {
-      top: -5px;
+    &.is-used { transform: translateX(50px); }
+
+    &.is-valid {
       cursor: pointer;
+      --pulse-color: #{$hintPurple};
+      animation: filterPulse 1.5s ease-in-out infinite;
+
+      &:hover {
+        transform: translateY(-5px);
+      }
     }
   }
 }

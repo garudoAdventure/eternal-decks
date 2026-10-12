@@ -1,6 +1,6 @@
 @use '../global.scss';
-
-$pulseColor: #60f931;
+@use '../anim.scss';
+@use '../color.scss' as *;
 
 #player-container {
   display: flex;
@@ -12,17 +12,19 @@ $pulseColor: #60f931;
 }
 
 .player {
+  width: 500px;
   margin-bottom: 10px;
   background-color: lavender;
-  width: 500px;
 
   &.is-valid {
     cursor: pointer;
+    
     box-shadow:
-      0 0 5px $pulseColor,
-      0 0 10px $pulseColor,
-      0 0 20px $pulseColor;
-
+    0 0 5px $hintGreen,
+    0 0 10px $hintGreen,
+    0 0 20px $hintGreen;
+    
+    --pulse-color: #{$hintGreen};
     animation: pulse 1.5s ease-in-out infinite;
   }
 
@@ -94,10 +96,11 @@ $pulseColor: #60f931;
 
         &.is-valid {
           box-shadow:
-            0 0 5px $pulseColor,
-            0 0 10px $pulseColor,
-            0 0 20px $pulseColor;
-
+            0 0 5px $hintGreen,
+            0 0 10px $hintGreen,
+            0 0 20px $hintGreen;
+          
+          --pulse-color: #{$hintGreen};
           animation: pulse 1.5s ease-in-out infinite;
         }
 
@@ -146,19 +149,5 @@ $pulseColor: #60f931;
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
-  }
-}
-
-@keyframes pulse {
-  0%,100% {
-    box-shadow:
-      0 0 5px $pulseColor,
-      0 0 10px $pulseColor;
-  }
-
-  50% {
-    box-shadow:
-      0 0 15px $pulseColor,
-      0 0 30px $pulseColor;
   }
 }

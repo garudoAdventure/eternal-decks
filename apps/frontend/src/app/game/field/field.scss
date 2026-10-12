@@ -1,4 +1,6 @@
 @use '../global.scss';
+@use '../color.scss' as *;
+@use '../anim.scss';
 
 @property --glow-angle {
   syntax: '<angle>';
@@ -16,13 +18,30 @@
     padding: 6px;
 
     .field-card-container {
+      width: 660px;
       display: flex;
       justify-content: space-between;
-      width: 660px;
 
       .field-card {
-        display: inline-flex;
         width: 660px;
+        display: inline-flex;
+
+        .card-m {
+          &.is-valid {
+            cursor: pointer;
+            box-shadow:
+              0 0 5px $hintGreen,
+              0 0 10px $hintGreen,
+              0 0 20px $hintGreen;
+            
+            --pulse-color: #{$hintGreen};
+            animation: pulse 1.5s ease-in-out infinite;
+
+            &:hover {
+              transform: translateY(-10px);
+            }
+          }
+        }
       }
 
       .field-eternal {

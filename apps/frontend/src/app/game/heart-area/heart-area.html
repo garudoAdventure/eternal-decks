@@ -1,8 +1,8 @@
 <div class="heart-container">
   @for(usedHeart of hearts(); track $index){
     <div class="heart-token"
-      [class.isUsed]="usedHeart"
-      [class.clickable]="validHeart()[$index]"
+      [class.is-used]="usedHeart"
+      [class.is-valid]="validHeart()[$index]"
       (click)="onSelectHeart($index)"
     ></div>
   }

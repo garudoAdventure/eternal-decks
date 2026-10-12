@@ -1,30 +1,45 @@
 @use '../global.scss';
+@use '../color.scss' as *;
+@use '../anim.scss';
 
 .river-container {
   display: flex;
   
   .river-card {
-    display: inline-block;
     width: 534px;
+    display: inline-block;
 
     .card-m {
       display: inline-block;
       margin-right: 13px;
+
+      &.is-valid {
+        cursor: pointer;
+        box-shadow:
+          0 0 5px $hintGreen,
+          0 0 10px $hintGreen,
+          0 0 20px $hintGreen;
+        
+        --pulse-color: #{$hintGreen};
+        animation: pulse 1.5s ease-in-out infinite;
+
+        &:hover {
+          transform: translateY(-10px);
+        }
+      }
     }
   }
 
   .river-rare-card {
-    display: inline-flex;
     width: 110px;
+    display: flex;
+    flex-direction: row-reverse;
 
     .card-m {
       position: relative;
       box-shadow: 0px 0px 5px 0px black;
 
-      &:nth-child(1) { z-index: 3; }
-      &:nth-child(2) { z-index: 2; }
-      &:nth-child(3) { z-index: 1; }
-      &:not(:first-child) { margin-left: -80px; }
+      &:not(:last-child) { margin-left: -80px; }
     }
   }
 }

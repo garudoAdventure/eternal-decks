@@ -6,7 +6,7 @@
       <div class="jewel-token"
         [id]="'jewel-' + $index"
         [attr.data-flip-id]="'jewel-' + $index"
-        [class.clickable]="validJewel()[$index]"
+        [class.is-valid]="validJewel()[$index]"
         (click)="onSelectJewel($index)"
       ></div>
     }

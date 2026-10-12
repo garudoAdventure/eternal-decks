@@ -1,4 +1,6 @@
 @use '../global.scss';
+@use '../color.scss' as *;
+@use '../anim.scss';
 @use '../jewel-area/jewel-area.scss';
 
 .eternal-container {
@@ -12,7 +14,16 @@
     &:nth-child(3n) { margin-right: 30px; }
     &:last-child { margin-right: 0px; }
 
-    &.clickable {
+    &.is-valid {
+      cursor: pointer;
+      box-shadow:
+        0 0 5px $hintGreen,
+        0 0 10px $hintGreen,
+        0 0 20px $hintGreen;
+      
+      --pulse-color: #{$hintGreen};
+      animation: pulse 1.5s ease-in-out infinite;
+
       &:hover {
         transform: translateY(-10px);
       }
@@ -25,9 +36,7 @@
     }
   }
   
-  .star-token {
-    &:nth-child(1) { top: 94px; left: 279px; }
-    &:nth-child(2) { top: 94px; left: 590px; }
-    &:nth-child(3) { top: 44px; left: 840px; }
-  }
+  #star-0 { top: 94px; left: 279px; }
+  #star-1 { top: 94px; left: 590px; }
+  #star-2 { top: 44px; left: 840px; }
 }

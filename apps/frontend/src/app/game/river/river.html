@@ -7,7 +7,7 @@
     @for(card of river().cards; track $index) {
       <div class="card-m"
         [attr.data-flip-id]="'card-' + card.id"
-        [class.clickable]="validRiverCard()"
+        [class.is-valid]="validRiverCard()"
         (click)="onSelectCard($index)"
       >
         <app-card [card]="card"></app-card>

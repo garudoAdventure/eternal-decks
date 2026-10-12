@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { GameEvent } from '@shared/types';
+import { CardType, GameEvent } from '@shared/types';
 import { Card } from '../Card/card';
 import { SocketService } from '../../core/socket.service';
 import { GameBoardStateService } from '../gameBoardState.service';
@@ -15,6 +15,8 @@ import { FieldDropZoneService } from './field-drop-zone.service';
   styleUrl: './field.scss',
 })
 export class Field {
+  get CardType() { return CardType; }
+
   private socketService = inject(SocketService);
   private gameBoardState = inject(GameBoardStateService);
   private gameActionState = inject(GameActionStateService);
@@ -24,6 +26,7 @@ export class Field {
   stars = this.gameBoardState.stars;
   campBonus = this.gameBoardState.campBonus;
   validField = this.gameActionState.validField;
+  validFieldCard = this.gameActionState.validFieldCard;
   validFieldEternal = this.gameActionState.validFieldEternal;
                   
   constructor() {

@@ -1,18 +1,32 @@
-.bloom {
-  animation: bloom2 0.5s linear infinite alternate;
+@keyframes pulse {
+  0%,100% {
+    box-shadow:
+      0 0 1px var(--pulse-color),
+      0 0 2px var(--pulse-color),
+      0 0 4px var(--pulse-color),
+      0 0 8px var(--pulse-color);
+  }
+
+  50% {
+    box-shadow:
+      0 0 1px var(--pulse-color),
+      0 0 2px var(--pulse-color),
+      0 0 8px var(--pulse-color),
+      0 0 12px var(--pulse-color);
+  }
 }
 
-@keyframes bloom {
-  from { filter: drop-shadow(0px 0px 10px white); }
-  to { filter: drop-shadow(0px 0px 10px #1e1e1e); }
-}
-
-@keyframes bloom2 {
-  from { filter: drop-shadow(0px 0px 10px #d2c5d6); }
-  to { filter: drop-shadow(0px 0px 10px #724b80) drop-shadow(0px 0px 10px #724b80) drop-shadow(0px 0px 10px #724b80);}
-}
-
-@keyframes float {
-  from { top: 0px; }
-  to { top: -5px; }
+@keyframes filterPulse {
+  0%, 100% {
+    filter:
+      drop-shadow(0 0 1px var(--pulse-color))
+      drop-shadow(0 0 2px var(--pulse-color))
+      drop-shadow(0 0 4px var(--pulse-color));
+  }
+  50% {
+    filter:
+      drop-shadow(0 0 1px var(--pulse-color))
+      drop-shadow(0 0 2px var(--pulse-color))
+      drop-shadow(0 0 8px var(--pulse-color));
+  }
 }

@@ -50,14 +50,16 @@ export class PlayerArea {
     });
   }
 
-  useCard(idx: number) {
+  useCard($event: MouseEvent, idx: number) {
+    $event.stopPropagation();
     this.socketService.emit(GameEvent.USE_CARD, {
       roomId: sessionStorage.getItem('roomId'),
       cardIdx: idx
     });
   }
 
-  rotateCard(idx: number) {
+  rotateCard($event: MouseEvent, idx: number) {
+    $event.stopPropagation();
     this.socketService.emit(GameEvent.ROTATE_CARD, {
       roomId: sessionStorage.getItem('roomId'),
       cardIdx: idx

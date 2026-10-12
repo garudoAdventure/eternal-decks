@@ -16,6 +16,7 @@
         >
           @for(card of field.cards; track card.id; let cardIdx = $index) {
             <div class="card-m"
+              [class.is-valid]="validFieldCard() && card.type !== CardType.RULE"
               [attr.data-flip-id]="'card-' + card.id"
               (click)="onSelectFieldCard(fieldIdx, $index)"
             >

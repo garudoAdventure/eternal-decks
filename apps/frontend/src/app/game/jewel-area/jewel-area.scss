@@ -1,5 +1,6 @@
 @use '../global.scss';
 @use '../anim.scss';
+@use '../color.scss' as *;
 
 .jewel-token {
   width: 40px;
@@ -10,7 +11,6 @@
 }
 
 .jewel-container {
-
   &.three-player {
     width: 175px;
     height: 130px;
@@ -61,9 +61,10 @@
   }
   
   .jewel-token {
-    &.clickable {
-      animation: bloom2 1s linear infinite alternate;
+    &.is-valid {
       cursor: pointer;
+      --pulse-color: #{$hintPurple};
+      animation: filterPulse 1.5s ease-in-out infinite;
 
       &:hover {
         transform: translateY(-5px);

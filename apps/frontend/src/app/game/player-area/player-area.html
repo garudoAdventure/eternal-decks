@@ -37,11 +37,11 @@
               >
                 <app-card [card]="card"></app-card>
                 @if (card.type == CardType.ABILITY) {
-                  <div class="use-btn" (click)="useCard(cardIdx)">
+                  <div class="use-btn" (click)="useCard($event, cardIdx)">
                     <mat-icon>check</mat-icon>
                   </div>
                 } @else {
-                  <div class="rotate-btn" (click)="rotateCard(cardIdx)">
+                  <div class="rotate-btn" (click)="rotateCard($event, cardIdx)">
                     <mat-icon>cached</mat-icon>
                   </div>
                 }
