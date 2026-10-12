@@ -8,7 +8,7 @@ export class KrakenAbility extends AbilityCard {
     super(CardGroup.KRAKEN);
   }
 
-  override play(player: Player): void {
+  override launchAbility(player: Player): void {
     if (player.game.river.cards.length == 0) {
       player.turnEnd();
     } else {

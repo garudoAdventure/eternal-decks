@@ -31,7 +31,6 @@ export class DrawPlayerDeckState extends PlayerState {
       string: '不抽了'
     };
     this.game.getPlayersData(this.player.id).forEach((player, idx) => {
-      if(idx === 0) return;
       this.stateData.validPlayer[idx] = player.deckNum > 0;
     });
     return this.stateData;

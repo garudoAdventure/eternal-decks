@@ -21,6 +21,9 @@ export class MainState extends PlayerState {
   }
 
   override selectCard(cardIdx: number): void {
+    const card = this.player.hand[cardIdx];
+    if (card.type === CardType.ABILITY || card.type === CardType.RULE) return;
+
     this.selectedCardFlag[cardIdx] = !this.selectedCardFlag[cardIdx];
     this.game.emitAvailableMove();
   }
@@ -79,19 +82,34 @@ export class MainState extends PlayerState {
 
   override useAbilityCard(cardIdx: number) {
     let card: Card = this.player.hand[cardIdx]!;
-    if (card.group != CardGroup.MINOTAUR) {
-      card = this.player.playCard(cardIdx);
+    
+    if (card.group === CardGroup.MINOTAUR) {
+      // 場上沒有卡可以與能力卡交換
       if (
-        card.group != CardGroup.PHOENIX &&
-        card.group != CardGroup.MERMAID &&
-        card.group != CardGroup.KING
+        this.game.fields[0].cards.length === 0 &&
+        this.game.fields[1].cards.length === 0 &&
+        this.game.fields[2].cards.length === 0
+      ) {
+        return;
+      }
+    } else {
+      card = this.player.playCard(cardIdx);
+      
+      // 星星牌不進棄牌堆
+      if (
+        card.group !== CardGroup.PHOENIX &&
+        card.group !== CardGroup.MERMAID &&
+        card.group !== CardGroup.KING &&
+        card.group !== CardGroup.FAIRY
       ) {
         this.game.discard.push(card);
       }
     }
+
     if (card instanceof AbilityCard) {
-      card.play(this.player);
+      card.launchAbility(this.player);
     }
+
     this.game.movedItemId.push('card-' + card.id);
     this.game.emitGameData();
     this.game.emitAvailableMove();
@@ -154,7 +172,6 @@ export class MainState extends PlayerState {
       if (!this.selectedCardFlag[i]) { continue; }
       
       let card: Card = this.player.hand[i]!;
-      if (card.type === CardType.ABILITY || card.type === CardType.RULE) { return validJewel; }
       if (card.type === CardType.RARE) {
         rareCardNum++;
       } else {
@@ -254,10 +271,25 @@ export class MainState extends PlayerState {
     let validHandCard = [];
     this.player.hand.forEach((card) => {
       let isValid = true;
-      this.game.eternals.forEach(eternal => {
-        if (!eternal.isCurse) return; 
-        isValid = isValid && eternal.isValid(card);
-      });
+
+      switch(card.type) {
+        case CardType.ABILITY:
+          isValid = false;
+          break;
+        case CardType.RULE: // Camp
+          isValid = true;
+          break;
+        case CardType.NUMBER:
+        case CardType.RARE:
+          this.game.eternals.forEach(eternal => {
+            if (!eternal.isCurse) return; 
+            isValid = isValid && eternal.isValid(card);
+          });
+          break;
+        default:
+          isValid = false;
+      }
+
       validHandCard.push(isValid);
     });
     return validHandCard;

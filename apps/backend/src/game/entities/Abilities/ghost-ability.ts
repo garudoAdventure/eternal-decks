@@ -9,7 +9,7 @@ export class GhostAbility extends AbilityCard {
     super(CardGroup.GHOST);
   }
 
-  override play(player: Player): void {
+  override launchAbility(player: Player): void {
     for (let gamePlayer of player.game.players) {
       gamePlayer.changeState(new DisscussIdleState());
     }

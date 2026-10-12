@@ -8,7 +8,7 @@ export class MinotaurAbility extends AbilityCard {
     super(CardGroup.MINOTAUR);
   }
 
-  override play(player: Player): void {
+  override launchAbility(player: Player): void {
     player.changeState(new SelectFieldCardState(this));
   }
 }

@@ -9,5 +9,5 @@ export abstract class AbilityCard extends Card {
 
   override rotate(): void {}
 
-  abstract play(player: Player): void;
+  abstract launchAbility(player: Player): void;
 }

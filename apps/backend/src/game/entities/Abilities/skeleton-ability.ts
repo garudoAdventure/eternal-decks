@@ -8,7 +8,7 @@ export class SkeletonAbility extends AbilityCard {
     super(CardGroup.SKELETON);
   }
 
-  override play(player: Player): void {
+  override launchAbility(player: Player): void {
     if (player.game.Hearts.filter((isUsed) => isUsed).length == 0) {
       player.turnEnd();
     } else {

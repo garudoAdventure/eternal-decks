@@ -7,7 +7,7 @@ export class MedusaAbility extends AbilityCard {
     super(CardGroup.MEDUSA);
   }
 
-  override play(player: Player): void {
+  override launchAbility(player: Player): void {
     let idx = 0;
     for (let card of player.game.discard) {
       if (card.type == CardType.RARE) {

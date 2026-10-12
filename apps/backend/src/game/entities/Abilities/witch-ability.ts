@@ -9,7 +9,7 @@ export class WitchAbility extends AbilityCard {
     super(CardGroup.WITCH);
   }
 
-  override play(player: Player): void {
+  override launchAbility(player: Player): void {
     if (player.game.eternals.filter((eternal: Eternal) => eternal.isCurse).length == 0) {
       player.turnEnd();
     } else {

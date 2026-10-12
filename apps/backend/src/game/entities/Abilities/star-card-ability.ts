@@ -3,7 +3,7 @@ import { AbilityCard } from "./ability-card";
 import { Player } from "../Player";
 
 export abstract class StarCardAbility extends AbilityCard {
-  override play(player: Player): void {
+  override launchAbility(player: Player): void {
     player.game.playStarAbility(this);
     player.turnEnd();
   }
