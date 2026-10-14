@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import { GameBoard, GameOverReason, PlayerData } from '@shared/types'
+import { Color, GameBoard, GameOverReason, PlayerData } from '@shared/types'
 import { Field } from './Field';
 import { River } from './River';
 import { Player } from './Player';
@@ -12,6 +12,7 @@ import { IdleState } from '../PlayerState/PlayerState';
 import { MainState } from '../PlayerState/MainState';
 import { GameOverState } from '../PlayerState/GameOverState';
 import { StageClearState } from '../PlayerState/StageClearState';
+import { Deck } from './Deck';
 
 export class Game extends EventEmitter {
   id: string;
@@ -160,8 +161,16 @@ export class Game extends EventEmitter {
   initPlayers() {
     this.currentPlayerIdx = 0;
 
-    this.players.forEach(player => {
+    const blueDeck = new Deck(createInitDeck(Color.BLUE));
+    const yellowDeck = new Deck(createInitDeck(Color.YELLOW));
+    const deckForTwoPlayer = [blueDeck, yellowDeck];
+
+    this.players.forEach((player, idx) => {
       player.deck.addCards(createInitDeck(player.color));
+      if (this.players.length === 2) {
+        deckForTwoPlayer[idx].shuffle();
+        player.deck.addCards(deckForTwoPlayer[idx].draw(2));
+      }
       player.deck.shuffle();
       player.hand = player.deck.draw(3);
       player.changeState(new IdleState());
