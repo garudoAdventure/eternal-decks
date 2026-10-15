@@ -32,7 +32,7 @@ export class Player {
   }
 
   playCard(cardIdx: number): Card {
-    let card: Card = this.hand[cardIdx]!;
+    const card: Card = this.hand[cardIdx]!;
     this.hand.splice(cardIdx, 1);
     return card;
   }

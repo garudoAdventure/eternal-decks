@@ -13,7 +13,7 @@ export class SelectEternalState extends PlayerState {
     const game = this.game;
 
     game.getJewel(this.jewelIdx);
-    game.eternals[eternalIdx]!.isCurse = false;
+    game.eternals[eternalIdx].isCurse = false;
     game.eternals[eternalIdx].useJewel = this.jewelIdx;
     
     if (

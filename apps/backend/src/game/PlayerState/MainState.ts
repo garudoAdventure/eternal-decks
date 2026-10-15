@@ -22,7 +22,7 @@ export class MainState extends PlayerState {
 
   override selectCard(cardIdx: number): void {
     const card = this.player.hand[cardIdx];
-    if (card.type === CardType.ABILITY || card.type === CardType.RULE) return;
+    if (!card || card.type === CardType.ABILITY || card.type === CardType.RULE) return;
 
     this.selectedCardFlag[cardIdx] = !this.selectedCardFlag[cardIdx];
     this.game.emitAvailableMove();
@@ -58,6 +58,8 @@ export class MainState extends PlayerState {
   }
 
   override selectHeart(heartIdx: number): void {
+    if (this.game.Hearts[heartIdx]) return;
+
     this.game.setHeart(heartIdx, true);
     this.player.changeState(new SelectPlayerState());
     this.game.emitGameData();
@@ -65,12 +67,14 @@ export class MainState extends PlayerState {
   }
 
   override selectJewel(jewelIdx: number): void {
-    if (jewelIdx == 5) { this.game.getStar(3); }
+    if (!this.getValidJewel()[jewelIdx]) return;
+    
+    if (jewelIdx === 5) { this.game.getStar(3); }
 
     let playCard: Card[] = [];
     for (let i = this.selectedCardFlag.length - 1; i >= 0; i--) {
       if (this.selectedCardFlag[i]) {
-        playCard.push(this.player.playCard(i));
+        playCard.unshift(this.player.playCard(i));
       }
     }
     this.game.river.setCard(this.player, playCard);
@@ -175,27 +179,27 @@ export class MainState extends PlayerState {
       if (card.type === CardType.RARE) {
         rareCardNum++;
       } else {
-        if (card.number == 1) { oneFiveNineFlag[0] = true; }
-        if (card.number == 5) { oneFiveNineFlag[1] = true; }
-        if (card.number == 9) { oneFiveNineFlag[2] = true; }
+        if (card.number === 1) { oneFiveNineFlag[0] = true; }
+        if (card.number === 5) { oneFiveNineFlag[1] = true; }
+        if (card.number === 9) { oneFiveNineFlag[2] = true; }
 
         if (!card.isDoubleColor) {
-          colorCount[card.cardColor[0]]!++;
+          colorCount[card.cardColor[0]]++;
           colorFlag[card.cardColor[0]] = true;
         } else {
-          colorCount[card.cardColor[0]]!++;
-          colorCount[card.cardColor[1]]!++;
-          if (card.cardColor[0] == Color.RED || card.cardColor[1] == Color.RED) {
+          colorCount[card.cardColor[0]]++;
+          colorCount[card.cardColor[1]]++;
+          if (card.cardColor[0] === Color.RED || card.cardColor[1] === Color.RED) {
             doubleColorNum[0]++;
           }
-          if (card.cardColor[0] == Color.BLUE || card.cardColor[1] == Color.BLUE) {
+          if (card.cardColor[0] === Color.BLUE || card.cardColor[1] === Color.BLUE) {
             doubleColorNum[1]++;
           }
         }
       }
       selectedCard.push(card);
     }
-    while(doubleColorNum[0]! > 0) {
+    while(doubleColorNum[0] > 0) {
       if (!colorFlag[Color.RED]) {
         colorFlag[Color.RED] = true;
       } else if (!colorFlag[Color.GREEN]) {
@@ -203,63 +207,63 @@ export class MainState extends PlayerState {
       }
       doubleColorNum[0]!--;
     }
-    while(doubleColorNum[1]! > 0) {
+    while(doubleColorNum[1] > 0) {
       if (!colorFlag[Color.BLUE]) {
         colorFlag[Color.BLUE] = true;
       } else if (!colorFlag[Color.YELLOW]) {
         colorFlag[Color.YELLOW] = true;
       }
-      doubleColorNum[1]!--;
+      doubleColorNum[1]--;
     }
-    if (selectedCard.length == 0 || selectedCard.length > 3) { return validJewel; }
+    if (selectedCard.length === 0 || selectedCard.length > 3) { return validJewel; }
 
     selectedCard = selectedCard.sort((a: Card, b: Card) => { return a.number! - b.number!; });
     
     if (selectedCard.length === 1) {
       if (rareCardNum > 0 ||
-        selectedCard[0].number == 1 || selectedCard[0].number == 9
+        selectedCard[0].number === 1 || selectedCard[0].number === 9
       ) {
         validJewel[0] = true;
         return validJewel;
       }
     }
 
-    if (selectedCard.length == 2) {
+    if (selectedCard.length === 2) {
       validJewel[6] = true;
 
-      if (rareCardNum != 0 || selectedCard[0].number == selectedCard[1].number) {
+      if (rareCardNum !== 0 || selectedCard[0].number === selectedCard[1].number) {
         validJewel[1] = true;
         return validJewel;
       }
     }
 
-    if (selectedCard.length == 3) {
+    if (selectedCard.length === 3) {
       validJewel[7] = true;
 
       if (
-        rareCardNum == 2 ||
-        rareCardNum == 1 && selectedCard[1].number == selectedCard[2].number ||
-        selectedCard[0].number == selectedCard[2].number
+        rareCardNum === 2 ||
+        rareCardNum === 1 && selectedCard[1].number === selectedCard[2].number ||
+        selectedCard[0].number === selectedCard[2].number
       ) {
         validJewel[3] = true;
       }
 
-      if (rareCardNum + oneFiveNineFlag.filter((flag) => flag).length == 3) {
+      if (rareCardNum + oneFiveNineFlag.filter((flag) => flag).length === 3) {
         validJewel[5] = true;
       }
 
       if (
-        rareCardNum == 2 ||
-        rareCardNum == 1 && colorCount.find(count => count == 2) ||
-        colorCount.find(count => count == 3)
+        rareCardNum === 2 ||
+        rareCardNum === 1 && colorCount.find(count => count === 2) ||
+        colorCount.find(count => count === 3)
       ) {
         validJewel[2] = true;
       }
 
       if (
-        rareCardNum == 2 ||
-        rareCardNum == 1 && colorFlag.filter((flag) => flag).length == 2 ||
-        colorFlag.filter((flag) => flag).length == 3
+        rareCardNum === 2 ||
+        rareCardNum === 1 && colorFlag.filter((flag) => flag).length === 2 ||
+        colorFlag.filter((flag) => flag).length === 3
       ) {
         validJewel[4] = true;
       }

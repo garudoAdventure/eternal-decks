@@ -4,6 +4,7 @@ import { SelectEternalState } from "./SelectEternalState";
 
 export class SelectJewelState extends PlayerState {
   override selectJewel(jewelIdx: number): void {
+    if (jewelIdx === 5) { return; }
     this.player.changeState(new SelectEternalState(jewelIdx));
     this.game.emitAvailableMove();
   }
