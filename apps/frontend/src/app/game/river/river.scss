@@ -7,10 +7,9 @@
   
   .river-card {
     width: 534px;
-    display: inline-block;
+    display: inline-flex;
 
     .card-m {
-      display: inline-block;
       margin-right: 13px;
 
       &.is-valid {
